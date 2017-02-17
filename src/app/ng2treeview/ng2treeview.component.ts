@@ -1,13 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, SkipSelf, Host, Optional } from '@angular/core';
 
 @Component({
   selector: 'ng2treeview',
   templateUrl: './ng2treeview.component.html',
-  styleUrls: ['./ng2treeview.component.css']
+  styleUrls: ['./ng2treeview.component.css'],
 })
 export class Ng2TreeViewComponent implements OnInit {
 
-  constructor() { }
+  constructor(@SkipSelf() @Host() @Optional() parent: Ng2TreeViewComponent) { }
 
   ngOnInit() {
   }
