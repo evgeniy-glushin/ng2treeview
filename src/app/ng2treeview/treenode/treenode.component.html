@@ -1,5 +1,8 @@
-<p>
-  {{node?.text}}
-  <ng-content>
-  </ng-content>
-</p>
+<li>
+  <details> <!--(click)="toggle()" -->
+    <summary>{{node?.text}} <button *ngIf="node?.add" (click)="add()">+</button></summary>
+    <ul *ngIf="node?.children?.length">
+      <treenode *ngFor="let child of node?.children" [node]="child"></treenode>
+    </ul>
+  </details>
+</li>

@@ -13,18 +13,25 @@ export class TreeNodeComponent implements OnInit {
     private viewContainerRef: ViewContainerRef) { }
 
   ngOnInit() {
-    let createComponent = (n: TreeNode) => {
-      const factory = this.componentFactoryResolver.resolveComponentFactory(TreeNodeComponent)
-      const ref = this.viewContainerRef.createComponent(factory)
-
-      ref.instance.node = n
-
-      ref.changeDetectorRef.detectChanges()
-    }
-
-    if (this.node.children) {
-      this.node.children.forEach(createComponent)
-    }
+    console.log('node: ', this.node)
   }
 
+  private add() {
+    if (!this.node.children)
+      this.node.children = []
+
+    //adds new random node
+    let newNode: TreeNode = { 
+      id: "newid", 
+      text: "newnode", 
+      add: true, 
+      remove: false,
+      expanded: true
+    };
+    this.node.children.push(newNode);
+  }
+
+  private toggle() {
+    this.node.expanded = !this.node.expanded
+  }
 }
