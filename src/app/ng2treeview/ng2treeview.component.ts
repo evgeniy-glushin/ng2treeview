@@ -7,7 +7,8 @@ import { Component, OnInit, SkipSelf, Host, Optional } from '@angular/core';
 })
 export class Ng2TreeViewComponent implements OnInit {
 
-  constructor(@SkipSelf() @Host() @Optional() parent: Ng2TreeViewComponent) { }
+  // @SkipSelf() @Host() @Optional() parent: Ng2TreeViewComponent
+  constructor() { }
 
   ngOnInit() {
   }

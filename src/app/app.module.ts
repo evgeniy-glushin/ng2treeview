@@ -11,6 +11,9 @@ import { Ng2TreeViewComponent } from './ng2treeview/ng2treeview.component';
     AppComponent,
     Ng2TreeViewComponent
   ],
+  entryComponents: [
+    Ng2TreeViewComponent
+  ],
   imports: [
     BrowserModule,
     FormsModule,
