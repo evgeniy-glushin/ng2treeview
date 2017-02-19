@@ -1,8 +1,17 @@
 <li>
-  <details> <!--(click)="toggle()" -->
-    <summary>{{node?.text}} <button *ngIf="node?.add" (click)="add()">+</button></summary>
-    <ul *ngIf="node?.children?.length">
-      <treenode *ngFor="let child of node?.children" [node]="child"></treenode>
-    </ul>
-  </details>
+  <a href="#" (click)="toggle()">
+    <span *ngIf="node.expanded && hasChildren">-</span>
+    <span *ngIf="!node.expanded && hasChildren">+</span>
+    <!--It just makes indent for the items without children nodes. TODO: figure something else out.-->
+    <span *ngIf="!hasChildren" style="visibility: hidden">*</span><!--TODO: probably I should move the style separate css file-->
+    
+    <span *ngIf="!isCreating">{{node?.text}}</span>
+    <input #nodeText type="text" *ngIf="isCreating" (blur)="save(nodeText.value)" (keydown)="save(nodeText.value, $event.keyCode)"/>
+    <a *ngIf="isCreating" href="#" style="font-size: x-small;">cancel</a>
+  </a>
+  <a *ngIf="node.add && !isCreating" href="#" style="font-size: x-small;" (click)="add()">add</a>
+  <!--TODO: replace this shity "add" word with some icon-->
+  <ul *ngIf="node.expanded && hasChildren">
+    <treenode *ngFor="let child of node?.children" [node]="child"></treenode>
+  </ul>
 </li>
