@@ -10,7 +10,6 @@ import { Component, OnInit, SkipSelf, Host, Optional, ComponentFactoryResolver, 
 export class Ng2TreeViewComponent implements AfterViewInit {
   @Input() nodes: TreeNode[]
 
-  //This may be helpful @SkipSelf() @Host() @Optional() parent: Ng2TreeViewComponent
   constructor(private componentFactoryResolver: ComponentFactoryResolver,
     private viewContainerRef: ViewContainerRef) { }
     

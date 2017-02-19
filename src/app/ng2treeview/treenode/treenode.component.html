@@ -1,4 +1,4 @@
-<li>
+<li *ngIf="!isRemoved">
   <a href="#" (click)="toggle()">
     <span *ngIf="node.expanded && hasChildren">-</span>
     <span *ngIf="!node.expanded && hasChildren">+</span>
@@ -6,10 +6,11 @@
     <span *ngIf="!hasChildren" style="visibility: hidden">*</span><!--TODO: probably I should move the style separate css file-->
     
     <span *ngIf="!isCreating">{{node?.text}}</span>
-    <input #nodeText type="text" *ngIf="isCreating" (blur)="save(nodeText.value)" (keydown)="save(nodeText.value, $event.keyCode)"/>
-    <a *ngIf="isCreating" href="#" style="font-size: x-small;">cancel</a>
+    <!--TODO: onblur event conflicts with cancel button click event (blur)="save(nodeText.value, 13, $event.relatedTarget.id)"-->
+    <input #nodeText type="text" *ngIf="isCreating" (keydown)="save(nodeText.value, $event.keyCode)"/>
   </a>
   <a *ngIf="node.add && !isCreating" href="#" style="font-size: x-small;" (click)="add()">add</a>
+  <a *ngIf="node.remove || isCreating" href="#" style="font-size: x-small;" (click)="remove()">remove</a>
   <!--TODO: replace this shity "add" word with some icon-->
   <ul *ngIf="node.expanded && hasChildren">
     <treenode *ngFor="let child of node?.children" [node]="child"></treenode>
