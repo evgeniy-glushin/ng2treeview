@@ -78,8 +78,4 @@ export class TreeNodeComponent implements OnInit {
       (this.node.state == NodeState.unchanged ||
         this.node.state == NodeState.added);
   }
-
-  // private cancel() {
-  //   this.parent.remove(this.node)
-  // }
 }

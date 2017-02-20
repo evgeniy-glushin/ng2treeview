@@ -9,9 +9,9 @@
     <!--TODO: onblur event conflicts with cancel button click event (blur)="save(nodeText.value, 13, $event.relatedTarget.id)"-->
     <input #nodeText type="text" *ngIf="isCreating" (keydown)="save(nodeText.value, $event.keyCode)"/>
   </a>
+  <!--TODO: replace this shity "add" word with some icon-->
   <a *ngIf="node.add && !isCreating" href="#" style="font-size: x-small;" (click)="add()">add</a>
   <a *ngIf="node.remove || isCreating" href="#" style="font-size: x-small;" (click)="remove()">remove</a>
-  <!--TODO: replace this shity "add" word with some icon-->
   <ul *ngIf="node.expanded && hasChildren">
     <treenode *ngFor="let child of node?.children" [node]="child"></treenode>
   </ul>
