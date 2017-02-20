@@ -10,7 +10,7 @@ import { Component, OnInit, Input, SkipSelf, Host, Optional } from '@angular/cor
 export class TreeNodeComponent implements OnInit {
   @Input() private node: TreeNode
 
-  constructor( @SkipSelf() @Host() @Optional() private parent: TreeNodeComponent) {
+  constructor(@SkipSelf() @Host() @Optional() private parent: TreeNodeComponent) {
     console.log('parent node: ', parent)
   }
 
@@ -18,20 +18,15 @@ export class TreeNodeComponent implements OnInit {
     console.log('node: ', this.node)
   }
 
-  //TODO: refactor this
   private remove() {
     this.parent.removeChild(this.node);
   }
 
   removeChild(node: TreeNode) {
-    if (node.state == NodeState.creating) {
-      if (this.node.children) {
-        let idx = this.node.children.indexOf(node);
-        console.log('remove. target index: ', idx)
-        this.node.children.splice(idx, 1);
-      }
-    } else {
-      node.state = NodeState.removed;
+    if (this.node.children) {
+      let idx = this.node.children.indexOf(node);
+      console.log('remove. target index: ', idx)
+      this.node.children.splice(idx, 1);
     }
   }
 
@@ -40,7 +35,8 @@ export class TreeNodeComponent implements OnInit {
       this.node.children = [];
 
     let children = this.node.children
-    let newNode = new TreeNode("id", "", false, true, true, NodeState.creating)
+    //TODO: figure default values out
+    let newNode = new TreeNode("", "", false, true, true, NodeState.creating)
     children.push(newNode);
 
     if (!this.node.expanded)
@@ -48,12 +44,12 @@ export class TreeNodeComponent implements OnInit {
   }
 
   private readonly ENTER_KEY_CODE = 13;
-  private save(text: string, keyCode: number = this.ENTER_KEY_CODE, e) {
+  private save(text: string, keyCode: number = this.ENTER_KEY_CODE) {
     if (text && keyCode == this.ENTER_KEY_CODE) {
       this.node.text = text;
       this.node.state = NodeState.added;
     }
-    console.log(`save. text: ${text}; code: ${keyCode}; e: `, e);
+    console.log(`save. text: ${text}; code: ${keyCode};`);
   }
 
   private toggle() {
@@ -67,10 +63,6 @@ export class TreeNodeComponent implements OnInit {
 
   private get isCreating() {
     return this.node.state == NodeState.creating;
-  }
-
-  private get isRemoved() {
-    return this.node.state == NodeState.removed;
   }
 
   private get canRemove() {
