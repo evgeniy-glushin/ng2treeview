@@ -2,6 +2,14 @@
   {{title}}
 </h1>
 
-<ng2treeview [nodes]="nodes" 
-(onCreated)="onNodeCreated($event)" 
-(onRemoved)="onNodeRemoved($event)"></ng2treeview>
+<ng2treeview [nodes]="nodes" (onCreated)="onNodeCreated($event)" (onRemoved)="onNodeRemoved($event)"></ng2treeview>
+
+<br/>
+<br/>
+
+<div>
+  <h3>Tracking:</h3>
+  <div *ngFor="let node of nodesHistory">
+    {{node.name}}: {{node.event}}
+  </div>
+</div>

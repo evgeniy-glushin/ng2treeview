@@ -16,11 +16,14 @@ export class AppComponent {
     { id: '4', text: 'node4', children: [{ id: '5', text: 'node5', children: [{ id: '6', text: 'node6' }] }] }
   ]
 
+  nodesHistory: any[] = []
   private onNodeCreated(newNode: TreeNode) {
     console.log('AppComponent.onNodeCreated: ', newNode)
+    this.nodesHistory.push({ name: newNode.text, event: 'created' })
   }
 
   private onNodeRemoved(node: TreeNode) {
     console.log('AppComponent.onNodeRemoved: ', node)
+    this.nodesHistory.push({ name: node.text, event: 'removed' })
   }
 }
