@@ -1,4 +1,3 @@
-import { NodeState } from './node-state.enum';
 export class TreeNode {
     constructor(public id: string,
         public text: string,
@@ -9,3 +8,10 @@ export class TreeNode {
         public children?: TreeNode[]) {
     }
 }
+
+export enum NodeState {
+    unchanged,
+    added,
+    creating
+}
+

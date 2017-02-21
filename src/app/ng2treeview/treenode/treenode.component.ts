@@ -1,21 +1,18 @@
-import { TreeNode } from './tree-node';
-import { NodeState } from './node-state.enum';
-import { Component, OnInit, Input, SkipSelf, Host, Optional } from '@angular/core';
+import { TreeNode, NodeState } from './tree-node';
+import { BaseTreeViewComponent } from './../base-tree-view-component'
+import { Component, OnInit, Input, SkipSelf, Host, Optional, Output, EventEmitter } from '@angular/core';
+// TODO: remove unused imports
 
 @Component({
   selector: 'treenode',
   templateUrl: './treenode.component.html',
   styleUrls: ['./treenode.component.css']
 })
-export class TreeNodeComponent implements OnInit {
+export class TreeNodeComponent extends BaseTreeViewComponent {
   @Input() private node: TreeNode
 
   constructor(@SkipSelf() @Host() @Optional() private parent: TreeNodeComponent) {
-    console.log('parent node: ', parent)
-  }
-
-  ngOnInit() {
-    console.log('node: ', this.node)
+    super();
   }
 
   private remove() {
@@ -27,6 +24,7 @@ export class TreeNodeComponent implements OnInit {
       let idx = this.node.children.indexOf(node);
       console.log('remove. target index: ', idx)
       this.node.children.splice(idx, 1);
+      this.onRemoved.emit(node);
     }
   }
 
@@ -44,10 +42,11 @@ export class TreeNodeComponent implements OnInit {
   }
 
   private readonly ENTER_KEY_CODE = 13;
-  private save(text: string, keyCode: number = this.ENTER_KEY_CODE) {
+  private save(text: string, keyCode = this.ENTER_KEY_CODE) {
     if (text && keyCode == this.ENTER_KEY_CODE) {
       this.node.text = text;
       this.node.state = NodeState.added;
+      this.onCreated.emit(this.node);
     }
     console.log(`save. text: ${text}; code: ${keyCode};`);
   }
@@ -63,11 +62,5 @@ export class TreeNodeComponent implements OnInit {
 
   private get isCreating() {
     return this.node.state == NodeState.creating;
-  }
-
-  private get canRemove() {
-    return this.node.remove &&
-      (this.node.state == NodeState.unchanged ||
-        this.node.state == NodeState.added);
   }
 }

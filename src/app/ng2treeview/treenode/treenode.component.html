@@ -13,6 +13,8 @@
   <a *ngIf="node.add && !isCreating" href="#" style="font-size: x-small;" (click)="add()">add</a>
   <a *ngIf="node.remove || isCreating" href="#" style="font-size: x-small;" (click)="remove()">remove</a>
   <ul *ngIf="node.expanded && hasChildren">
-    <treenode *ngFor="let child of node?.children" [node]="child"></treenode>
+    <treenode *ngFor="let child of node?.children" [node]="child" 
+    (onCreated)="onCreatedHandler($event)"
+    (onRemoved)="onRemovedHandler($event)"></treenode>
   </ul>
 </li>
