@@ -1,5 +1,5 @@
 import { TreeNode, NodeState } from './tree-node';
-import { BaseTreeViewComponent } from './../base-tree-view-component'
+import { TreeViewComponent } from './../tree-view-component'
 import { Component, OnInit, Input, SkipSelf, Host, Optional, Output, EventEmitter } from '@angular/core';
 // TODO: remove unused imports
 
@@ -8,26 +8,22 @@ import { Component, OnInit, Input, SkipSelf, Host, Optional, Output, EventEmitte
   templateUrl: './treenode.component.html',
   styleUrls: ['./treenode.component.css']
 })
-export class TreeNodeComponent extends BaseTreeViewComponent {
+export class TreeNodeComponent extends TreeViewComponent {
   @Input() private node: TreeNode
+  @Input() parentComponent: TreeViewComponent
 
-  constructor(@SkipSelf() @Host() @Optional() private parent: TreeNodeComponent) {
-    super();
+  get children() {
+    console.log('TreeNodeComponent.children')
+    return this.node.children;
   }
 
-  private remove() {
-    this.parent.removeChild(this.node);
+  get parent() {
+    console.log('TreeNodeComponent.parent: ', this.parentComponent)
+    return this.parentComponent;
   }
 
-  removeChild(node: TreeNode) {
-    if (this.node.children) {
-      let idx = this.node.children.indexOf(node);
-      console.log('remove. target index: ', idx)
-      this.node.children.splice(idx, 1);
-      this.onRemoved.emit(node);
-    }
-  }
-
+  //TODO: move Add and Aave methods to TreeViewComponent 
+  //since this logic needed in Ng2TreeViewComponent as well 
   private add() {
     if (!this.node.children)
       this.node.children = [];

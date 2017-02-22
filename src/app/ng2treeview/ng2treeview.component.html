@@ -1,5 +1,5 @@
 <ul>
-  <treenode *ngFor="let child of nodes" [node]="child" 
+  <treenode *ngFor="let child of nodes" [node]="child" [parentComponent]="this"
   (onCreated)="onCreatedHandler($event)" 
   (onRemoved)="onRemovedHandler($event)"></treenode>
 </ul>

@@ -11,7 +11,7 @@ export class AppComponent {
 
   private nodes =
   [
-    { id: '1', text: 'node1', add: true, remove: false },
+    { id: '1', text: 'node1', add: true, remove: true },
     { id: '2', text: 'node2', children: [{ id: '3', text: 'node3', remove: true }] },
     { id: '4', text: 'node4', children: [{ id: '5', text: 'node5', children: [{ id: '6', text: 'node6' }] }] }
   ]
