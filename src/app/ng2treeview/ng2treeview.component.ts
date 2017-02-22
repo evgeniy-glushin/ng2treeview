@@ -5,8 +5,12 @@ import { Component, Input, ContentChildren, QueryList, ViewChildren, AfterViewIn
 
 @Component({
   selector: 'ng2treeview',
-  templateUrl: './ng2treeview.component.html',
   styleUrls: ['./ng2treeview.component.css'],
+  template: `<ul>
+               <treenode *ngFor="let child of nodes" [node]="child" [parentComponent]="this"
+                         (onCreated)="onCreatedHandler($event)" 
+                         (onRemoved)="onRemovedHandler($event)"></treenode>
+            </ul>`
 })
 export class Ng2TreeViewComponent extends TreeViewComponent {
   @Input() nodes: TreeNode[]
