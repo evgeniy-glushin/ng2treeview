@@ -10,11 +10,12 @@
     <input #nodeText type="text" *ngIf="isCreating" (keydown)="save(nodeText.value, $event.keyCode)"/>
   </a>
   <!--TODO: replace this shity "add" word with some icon-->
-  <a *ngIf="node.add && !isCreating" href="#" style="font-size: x-small;" (click)="add()">add</a>
-  <a *ngIf="node.remove || isCreating" href="#" style="font-size: x-small;" (click)="remove(node)">remove</a>
+  <a *ngIf="config.allowAdding && !isCreating" href="#" style="font-size: x-small;" (click)="add()">add</a>
+  <a *ngIf="config.allowRemoving || isCreating" href="#" style="font-size: x-small;" (click)="remove(node)">remove</a>
   <ul *ngIf="node.expanded && hasChildren">
     <treenode *ngFor="let child of node?.children" [node]="child" [parentComponent]="this"
     (onCreated)="onCreatedHandler($event)"
-    (onRemoved)="onRemovedHandler($event)"></treenode>
+    (onRemoved)="onRemovedHandler($event)"
+    [config]="config"></treenode>
   </ul>
 </li>

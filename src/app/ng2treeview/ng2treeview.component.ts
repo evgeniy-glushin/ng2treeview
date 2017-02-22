@@ -9,11 +9,22 @@ import { Component, Input, ContentChildren, QueryList, ViewChildren, AfterViewIn
   template: `<ul>
                <treenode *ngFor="let child of nodes" [node]="child" [parentComponent]="this"
                          (onCreated)="onCreatedHandler($event)" 
-                         (onRemoved)="onRemovedHandler($event)"></treenode>
+                         (onRemoved)="onRemovedHandler($event)"
+                         [config]="config"></treenode>
             </ul>`
 })
 export class Ng2TreeViewComponent extends TreeViewComponent {
   @Input() nodes: TreeNode[]
+
+  @Input() set allowAdding(value: boolean) {
+    this.config.allowAdding = value;
+    console.log('Ng2TreeViewComponent.allowAdding: ', value)
+  }
+
+  @Input() set allowRemoving(value: boolean) {
+    this.config.allowRemoving = value;
+    console.log('Ng2TreeViewComponent.allowRemoving: ', value)
+  }
 
   get children() {
     console.log('Ng2TreeViewComponent.children')
@@ -23,7 +34,7 @@ export class Ng2TreeViewComponent extends TreeViewComponent {
   get parent() {
     console.log('TreeNodeComponent.parent')
     return this;
-  }  
+  }
 
   /* Just playing around with getting child components. It might be helpful in nearest future but I don't know for what now :) */
   // @ContentChildren(TreeNodeComponent) contentChildren: QueryList<TreeNodeComponent>;

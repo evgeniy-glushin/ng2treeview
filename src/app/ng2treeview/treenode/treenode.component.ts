@@ -30,7 +30,7 @@ export class TreeNodeComponent extends TreeViewComponent {
 
     let children = this.node.children
     //TODO: figure default values out
-    let newNode = new TreeNode("", "", false, true, true, NodeState.creating)
+    let newNode = new TreeNode("", "", false, NodeState.creating)
     children.push(newNode);
 
     if (!this.node.expanded)

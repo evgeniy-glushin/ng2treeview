@@ -1,14 +1,11 @@
 import { TreeNodeComponent } from './treenode/treenode.component';
-import { Output, EventEmitter, ViewChildren, SkipSelf, Host, Optional, } from '@angular/core'
-import { TreeNode } from './treenode/tree-node';
+import { Output, EventEmitter, ViewChildren, SkipSelf, Host, Optional, Input } from '@angular/core'
+import { TreeNode, TreeViewConfig } from './treenode/tree-node';
 
 //Represents abstraction and basic implementation for tree-like components.  
 export abstract class TreeViewComponent {
-    @Output() onCreated = new EventEmitter<TreeNode>()
-    protected onCreatedHandler(newNode: TreeNode) {
-        console.log('BaseTreeViewComponent.onCreatedHandler: ', newNode)
-        this.onCreated.emit(newNode);
-    }
+    //The dafault settings
+    @Input() protected config: TreeViewConfig = new TreeViewConfig(false, false);
 
     //If it looks wierd or unfamiliar for you look into Template Method design pattern.
     abstract get children()
@@ -26,6 +23,13 @@ export abstract class TreeViewComponent {
     protected remove(node: TreeNode) {
         console.log('BaseTreeViewComponent.remove: ', node)
         this.parent.removeChild(node);
+    }
+
+
+    @Output() onCreated = new EventEmitter<TreeNode>()
+    protected onCreatedHandler(newNode: TreeNode) {
+        console.log('BaseTreeViewComponent.onCreatedHandler: ', newNode)
+        this.onCreated.emit(newNode);
     }
 
     //TODO: trigger this event in children classes
