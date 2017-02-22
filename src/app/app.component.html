@@ -3,7 +3,7 @@
 </h1>
 
 <ng2treeview [nodes]="nodes" (onCreated)="onNodeCreated($event)" (onRemoved)="onNodeRemoved($event)" 
-[allowAdding]="true" [allowRemoving]="true"></ng2treeview>
+  [allowAdding]="adding.checked" [allowRemoving]="removing.checked"></ng2treeview>
 
   <br/>
   <br/>
@@ -13,4 +13,13 @@
     <div *ngFor="let node of nodesHistory">
       {{node.name}}: {{node.event}}
     </div>
+  </div>
+
+  <br/>
+  <br/>
+
+  <div>
+    <h3>Configuration:</h3>
+    <input #adding type="checkbox" name="Adding">
+    <input #removing type="checkbox" name="Removing">
   </div>
