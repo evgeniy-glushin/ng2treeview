@@ -1,6 +1,6 @@
 import { TreeNodeComponent } from './treenode/treenode.component';
 import { Output, EventEmitter, ViewChildren, SkipSelf, Host, Optional, Input } from '@angular/core'
-import { TreeNode, TreeViewConfig } from './treenode/tree-node';
+import { TreeNode, TreeViewConfig, NodeState } from './treenode/tree-node';
 
 //Represents abstraction and basic implementation for tree-like components.  
 export abstract class TreeViewComponent {
@@ -23,6 +23,26 @@ export abstract class TreeViewComponent {
     protected remove(node: TreeNode) {
         console.log('BaseTreeViewComponent.remove: ', node)
         this.parent.removeChild(node);
+    }
+
+    expanded: boolean
+    private add() {
+        //TODO: figure default values out
+        let newNode = new TreeNode("", "", NodeState.creating)
+        this.children.push(newNode);
+
+        if (!this.expanded)
+            this.expanded = true;
+    }
+
+    private readonly ENTER_KEY_CODE = 13;
+    private save(node: TreeNode, text: string, keyCode = this.ENTER_KEY_CODE) {
+        if (text && keyCode == this.ENTER_KEY_CODE) {
+            node.text = text;
+            node.state = NodeState.added;
+            this.onCreated.emit(node);
+        }
+        console.log(`save. text: ${text}; code: ${keyCode};`);
     }
 
 

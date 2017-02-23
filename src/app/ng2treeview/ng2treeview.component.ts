@@ -7,6 +7,7 @@ import { Component, Input, ContentChildren, QueryList, ViewChildren, AfterViewIn
   selector: 'ng2treeview',
   styleUrls: ['./ng2treeview.component.css'],
   template: `<ul>
+               <li *ngIf="config.allowAdding"><a href="#" style="font-size: x-small;" (click)="add()">add</a></li>               
                <treenode *ngFor="let child of nodes" [node]="child" [parentComponent]="this"
                          (onCreated)="onCreatedHandler($event)" 
                          (onRemoved)="onRemovedHandler($event)"

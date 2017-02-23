@@ -13,7 +13,9 @@ export class TreeNodeComponent extends TreeViewComponent {
   @Input() parentComponent: TreeViewComponent
 
   get children() {
-    console.log('TreeNodeComponent.children')
+    if (!this.node.children)
+      this.node.children = []
+    console.log('TreeNodeComponent.children', this.node.children)
     return this.node.children;
   }
 
@@ -22,33 +24,8 @@ export class TreeNodeComponent extends TreeViewComponent {
     return this.parentComponent;
   }
 
-  //TODO: move Add and Aave methods to TreeViewComponent 
-  //since this logic needed in Ng2TreeViewComponent as well 
-  private add() {
-    if (!this.node.children)
-      this.node.children = [];
-
-    let children = this.node.children
-    //TODO: figure default values out
-    let newNode = new TreeNode("", "", false, NodeState.creating)
-    children.push(newNode);
-
-    if (!this.node.expanded)
-      this.node.expanded = true;
-  }
-
-  private readonly ENTER_KEY_CODE = 13;
-  private save(text: string, keyCode = this.ENTER_KEY_CODE) {
-    if (text && keyCode == this.ENTER_KEY_CODE) {
-      this.node.text = text;
-      this.node.state = NodeState.added;
-      this.onCreated.emit(this.node);
-    }
-    console.log(`save. text: ${text}; code: ${keyCode};`);
-  }
-
   private toggle() {
-    this.node.expanded = !this.node.expanded;
+    this.expanded = !this.expanded;
   }
 
   private get hasChildren() {
