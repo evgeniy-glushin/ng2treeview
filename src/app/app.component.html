@@ -1,25 +1,25 @@
-<h1>
-  {{title}}
-</h1>
-
 <ng2treeview [nodes]="nodes" (onCreated)="onNodeCreated($event)" (onRemoved)="onNodeRemoved($event)" 
-  [allowAdding]="adding.checked" [allowRemoving]="removing.checked"></ng2treeview>
+             [allowAdding]="adding.checked" [allowRemoving]="removing.checked"></ng2treeview>
 
-  <br/>
-  <br/>
+<br/>
+<br/>
 
-  <div>
-    <h3>Tracking:</h3>
-    <div *ngFor="let node of nodesHistory">
-      {{node.name}}: {{node.event}}
-    </div>
+<div>
+  <h3>Tracking:</h3>
+  <div *ngFor="let node of nodesHistory">
+    {{node.name}}: {{node.event}}
   </div>
+</div>
 
-  <br/>
-  <br/>
+<br/>
+<br/>
 
-  <div>
-    <h3>Configuration:</h3>
-    <input #adding type="checkbox" name="Adding">
-    <input #removing type="checkbox" name="Removing">
-  </div>
+<div>
+  <h3>Configuration:</h3>
+
+  <input #adding type="checkbox" name="Adding" [ngModel]="mAdding">
+  <label for="Adding">allow add</label>
+
+  <input #removing type="checkbox" name="Removing" [ngModel]="mRemoving">
+  <label for="Removing">allow remove</label>
+</div>
