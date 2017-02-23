@@ -24,10 +24,6 @@ export class TreeNodeComponent extends TreeViewComponent {
     return this.parentComponent;
   }
 
-  private toggle() {
-    this.expanded = !this.expanded;
-  }
-
   private get hasChildren() {
     let children = this.node.children;
     return (children != undefined && children.length > 0);

@@ -27,6 +27,11 @@ export class Ng2TreeViewComponent extends TreeViewComponent {
     console.log('Ng2TreeViewComponent.allowRemoving: ', value)
   }
 
+  @Input() set escalation(value: boolean) {
+    this.config.escalation = value;
+    console.log('Ng2TreeViewComponent.escalation: ', value)
+  }
+
   get children() {
     console.log('Ng2TreeViewComponent.children')
     return this.nodes;
