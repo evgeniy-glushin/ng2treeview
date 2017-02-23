@@ -8,7 +8,7 @@ export abstract class TreeViewComponent {
     @Input() protected config: TreeViewConfig = new TreeViewConfig(false, false);
 
     //If it looks wierd or unfamiliar for you look into Template Method design pattern.
-    abstract get children()
+    abstract get children(): TreeNode[]
     removeChild(node: TreeNode) {
         if (this.children) {
             let idx = this.children.indexOf(node);
