@@ -2,7 +2,8 @@ export class TreeNode {
     constructor(public id: string,
         public text: string,
         public state: NodeState = NodeState.unchanged,
-        public children?: TreeNode[]) {
+        public children?: TreeNode[],
+        public expanded: boolean = true) {
     }
 }
 

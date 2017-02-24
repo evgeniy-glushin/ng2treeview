@@ -1,19 +1,22 @@
 <li>
   <a href="#" (click)="toggle()">
-    <span *ngIf="expanded && hasChildren">-</span>
-    <span *ngIf="!expanded && hasChildren">+</span>
+    <span *ngIf="node.expanded && hasChildren">-</span>
+    <span *ngIf="!node.expanded && hasChildren">+</span>
     <!--It just makes indent for the items without children nodes. TODO: figure something else out.-->
     <span *ngIf="!hasChildren" style="visibility: hidden">*</span><!--TODO: probably I should move the style separate css file-->
     
     <span *ngIf="!isCreating">{{node?.text}}</span>
+  </a>
+
+
     <!--TODO: onblur event conflicts with cancel button click event (blur)="save(nodeText.value, 13, $event.relatedTarget.id)"-->
     <input #nodeText type="text" *ngIf="isCreating" (keydown)="save(node, nodeText.value, $event.keyCode)"/>
-  </a>
+
   <!--TODO: replace this shity "add" word with some icon-->
   <a *ngIf="config.allowAdding && !isCreating" href="#" style="font-size: x-small;" (click)="add()">add</a>
   <a *ngIf="config.allowRemoving || isCreating" href="#" style="font-size: x-small;" (click)="remove(node)">remove</a>
   <a *ngIf="config.escalation && !isCreating" href="#" style="font-size: x-small;" (click)="toggle(config.escalation)">expand/collapse all</a>
-  <ul *ngIf="expanded && hasChildren">
+  <ul *ngIf="node.expanded && hasChildren">
     <treenode *ngFor="let child of node?.children" [node]="child" [parentComponent]="this"
     (onCreated)="onCreatedHandler($event)"
     (onRemoved)="onRemovedHandler($event)"

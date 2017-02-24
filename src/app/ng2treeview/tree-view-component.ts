@@ -12,7 +12,7 @@ export abstract class TreeViewComponent { //implements AfterViewInit, AfterConte
     removeChild(node: TreeNode) {
         if (this.children) {
             let idx = this.children.indexOf(node);
-            console.log('BaseTreeViewComponent.removeChild. target index: ', idx)            
+            console.log('BaseTreeViewComponent.removeChild. target index: ', idx)
             this.children.splice(idx, 1);
             this.onRemoved.emit(node);
         }
@@ -25,14 +25,14 @@ export abstract class TreeViewComponent { //implements AfterViewInit, AfterConte
         this.parent.removeChild(node);
     }
 
-    expanded: boolean
+    abstract toggle(escalation: boolean): void;
+    // expanded: boolean
     private add() {
         //TODO: figure default values out
         let newNode = new TreeNode("", "", NodeState.creating)
         this.children.push(newNode);
 
-        if (!this.expanded)
-            this.expanded = true;
+        this.toggle(false)
     }
 
     private readonly ENTER_KEY_CODE = 13;
@@ -45,12 +45,6 @@ export abstract class TreeViewComponent { //implements AfterViewInit, AfterConte
         console.log(`save. text: ${text}; code: ${keyCode};`);
     }
 
-    protected toggle(escalation: boolean = false) {
-        this.expanded = !this.expanded;
-        if (escalation) {
-
-        }
-    }
 
     @Output() onCreated = new EventEmitter<TreeNode>()
     protected onCreatedHandler(newNode: TreeNode) {

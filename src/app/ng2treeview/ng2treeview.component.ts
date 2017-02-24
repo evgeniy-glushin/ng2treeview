@@ -42,6 +42,10 @@ export class Ng2TreeViewComponent extends TreeViewComponent {
     return this;
   }
 
+  toggle(escalation: boolean) {
+
+  }
+
   /* Just playing around with getting child components. It might be helpful in nearest future but I don't know for what now :) */
   // @ContentChildren(TreeNodeComponent) contentChildren: QueryList<TreeNodeComponent>;
   // @ViewChildren(TreeNodeComponent) viewChildren: QueryList<TreeNodeComponent>;
