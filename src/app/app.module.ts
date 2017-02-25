@@ -6,12 +6,14 @@ import { HttpModule } from '@angular/http';
 import { AppComponent } from './app.component';
 import { Ng2TreeViewComponent } from './ng2treeview/ng2treeview.component';
 import { TreeNodeComponent } from './ng2treeview/treenode/treenode.component';
+import { CheckTreeNodeComponent } from './ng2treeview/check-tree-node/check-tree-node.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     Ng2TreeViewComponent,
-    TreeNodeComponent
+    TreeNodeComponent,
+    CheckTreeNodeComponent
   ],
   entryComponents: [
     TreeNodeComponent

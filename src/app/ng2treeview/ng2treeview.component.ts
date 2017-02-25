@@ -1,4 +1,5 @@
-import { TreeNode } from './treenode/tree-node';
+import { CheckTreeNodeComponent } from './check-tree-node/check-tree-node.component';
+import { TreeNode, TreeViewMode } from './treenode/tree-node';
 import { TreeNodeComponent } from './treenode/treenode.component'
 import { TreeViewComponent } from './tree-view-component'
 import { Component, Input, ContentChildren, QueryList, ViewChildren, AfterViewInit, AfterContentInit } from '@angular/core';
@@ -8,11 +9,11 @@ import { Component, Input, ContentChildren, QueryList, ViewChildren, AfterViewIn
   styleUrls: ['./ng2treeview.component.css'],
   template: `<ul>
                <li *ngIf="config.allowAdding"><a href="#" style="font-size: x-small;" (click)="add()">add</a></li>               
-               <treenode *ngFor="let child of nodes" [node]="child" [parentComponent]="this"
+               <tree-node *ngFor="let child of nodes" [node]="child" [parentComponent]="this"
                          (onCreated)="onCreatedHandler($event)" 
                          (onRemoved)="onRemovedHandler($event)"
                          (onClick)="onClickHandler($event)"
-                         [config]="config"></treenode>
+                         [config]="config"></tree-node>
             </ul>`
 })
 export class Ng2TreeViewComponent extends TreeViewComponent {
@@ -30,6 +31,12 @@ export class Ng2TreeViewComponent extends TreeViewComponent {
 
   @Input() set escalation(value: boolean) {
     this.config.escalation = value;
+    console.log('Ng2TreeViewComponent.escalation: ', value)
+  }
+
+  @Input() set mode(value: TreeViewMode) {
+    //TODO: validate the input value since TS compiler doesn't do that when it comes from markup
+    this.config.mode = value;
     console.log('Ng2TreeViewComponent.escalation: ', value)
   }
 

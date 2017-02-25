@@ -3,9 +3,9 @@ import { Output, EventEmitter, ViewChildren, SkipSelf, Host, Optional, Input, Qu
 import { TreeNode, TreeViewConfig, NodeState } from './treenode/tree-node';
 
 //Represents abstraction and basic implementation for tree-like components.  
-export abstract class TreeViewComponent { //implements AfterViewInit, AfterContentInit
+export abstract class TreeViewComponent { 
     //The dafault settings
-    @Input() protected config: TreeViewConfig = new TreeViewConfig(true, true, true);
+    @Input() protected config: TreeViewConfig = new TreeViewConfig(true, true, true, 'simple');
 
     //If it looks wierd or unfamiliar for you look into Template Method design pattern.
     abstract get children(): TreeNode[]

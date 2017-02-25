@@ -17,7 +17,7 @@
   <a *ngIf="config.allowRemoving || isCreating" href="#" style="font-size: x-small;" (click)="remove(node)">remove</a>
   <a *ngIf="config.escalation && !isCreating" href="#" style="font-size: x-small;" (click)="toggle(config.escalation)">expand/collapse all</a>
   <ul *ngIf="node.expanded && hasChildren">
-    <treenode *ngFor="let child of node?.children" [node]="child" [parentComponent]="this" (onCreated)="onCreatedHandler($event)"
-      (onRemoved)="onRemovedHandler($event)" (onClick)="onClickHandler($event)" [config]="config"></treenode>
+    <tree-node *ngFor="let child of node?.children" [node]="child" [parentComponent]="this" (onCreated)="onCreatedHandler($event)"
+      (onRemoved)="onRemovedHandler($event)" (onClick)="onClickHandler($event)" [config]="config"></tree-node>
   </ul>
 </li>

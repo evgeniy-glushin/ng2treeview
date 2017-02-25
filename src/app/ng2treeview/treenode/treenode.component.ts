@@ -4,7 +4,7 @@ import { Component, OnInit, Input, SkipSelf, Host, Optional, Output, EventEmitte
 // TODO: remove unused imports
 
 @Component({
-  selector: 'treenode',
+  selector: 'tree-node',
   templateUrl: './treenode.component.html',
   styleUrls: ['./treenode.component.css']
 })
