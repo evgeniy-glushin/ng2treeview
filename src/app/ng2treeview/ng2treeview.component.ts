@@ -7,13 +7,18 @@ import { Component, Input, ContentChildren, QueryList, ViewChildren, AfterViewIn
 @Component({
   selector: 'ng2treeview',
   styleUrls: ['./ng2treeview.component.css'],
-  template: `<ul>
+  template: `<ul [ngSwitch]="config.mode">
                <li *ngIf="config.allowAdding"><a href="#" style="font-size: x-small;" (click)="add()">add</a></li>               
-               <tree-node *ngFor="let child of nodes" [node]="child" [parentComponent]="this"
-                         (onCreated)="onCreatedHandler($event)" 
-                         (onRemoved)="onRemovedHandler($event)"
-                         (onClick)="onClickHandler($event)"
-                         [config]="config"></tree-node>
+               <div *ngSwitchCase="'simple'">
+                  <tree-node *ngFor="let child of nodes" [node]="child" [parentComponent]="this"
+                            (onCreated)="onCreatedHandler($event)" 
+                            (onRemoved)="onRemovedHandler($event)"
+                            (onClick)="onClickHandler($event)"
+                            [config]="config"></tree-node>
+               </div>
+               <div *ngSwitchCase="'check'">
+                  <check-tree-node></check-tree-node>
+               </div>
             </ul>`
 })
 export class Ng2TreeViewComponent extends TreeViewComponent {
