@@ -17,7 +17,10 @@ import { Component, Input, ContentChildren, QueryList, ViewChildren, AfterViewIn
                             [config]="config"></tree-node>
                </div>
                <div *ngSwitchCase="'check'">
-                  <check-tree-node></check-tree-node>
+                  <check-tree-node *ngFor="let child of nodes" [node]="child" [parentComponent]="this"
+                            (onCreated)="onCreatedHandler($event)"                             
+                            (onClick)="onClickHandler($event)"
+                            [config]="config"></check-tree-node>
                </div>
             </ul>`
 })
