@@ -24,9 +24,11 @@ export class TreeNodeComponent extends TreeViewComponent {
     return this.parentComponent;
   }
 
-  toggle(escalation: boolean = false) {
-    console.log(`TreeNodeComponent.toggle. escalation: ${escalation}; node.expanded: ${this.node.expanded}`)
-    this.node.expanded = !this.node.expanded;
+  toggle(escalation: boolean = false, value?: boolean) {
+    console.log(`TreeNodeComponent.toggle. escalation: ${escalation}; node.expanded: ${this.node.expanded}; value: ${value}`)
+    this.node.expanded = value != undefined ?
+      value : !this.node.expanded;
+
     if (escalation) {
       this.escalateToggle(this.node.children);
     }

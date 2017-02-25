@@ -5,7 +5,7 @@ import { TreeNode, TreeViewConfig, NodeState } from './treenode/tree-node';
 //Represents abstraction and basic implementation for tree-like components.  
 export abstract class TreeViewComponent { //implements AfterViewInit, AfterContentInit
     //The dafault settings
-    @Input() protected config: TreeViewConfig = new TreeViewConfig(false, false, false);
+    @Input() protected config: TreeViewConfig = new TreeViewConfig(true, true, true);
 
     //If it looks wierd or unfamiliar for you look into Template Method design pattern.
     abstract get children(): TreeNode[]
@@ -25,14 +25,14 @@ export abstract class TreeViewComponent { //implements AfterViewInit, AfterConte
         this.parent.removeChild(node);
     }
 
-    abstract toggle(escalation: boolean): void;
+    abstract toggle(escalation: boolean, value?: boolean): void;
     // expanded: boolean
     private add() {
         //TODO: figure default values out
         let newNode = new TreeNode("", "", NodeState.creating)
         this.children.push(newNode);
 
-        this.toggle(false)
+        this.toggle(false, true)
     }
 
     private readonly ENTER_KEY_CODE = 13;
