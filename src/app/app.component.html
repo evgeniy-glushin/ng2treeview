@@ -1,6 +1,18 @@
+<ng2treeview [nodes]="checkNodes" (onCreated)="onNodeCreated($event)" (onRemoved)="onNodeRemoved($event)" 
+             (onClick)="onNodeClicked($event)" [allowAdding]="adding.checked" [allowRemoving]="removing.checked"
+             [escalation]="true" mode="check" (onChecked)="onNodeChecked($event)"></ng2treeview>
+
+
+<br/>
+<br/>
+
+<br/>
+<br/>
+
+
 <ng2treeview [nodes]="nodes" (onCreated)="onNodeCreated($event)" (onRemoved)="onNodeRemoved($event)" 
              (onClick)="onNodeClicked($event)" [allowAdding]="adding.checked" [allowRemoving]="removing.checked"
-             [escalation]="true" mode="check"></ng2treeview>
+             [escalation]="true" mode="simple"></ng2treeview>
 
 <br/>
 <br/>

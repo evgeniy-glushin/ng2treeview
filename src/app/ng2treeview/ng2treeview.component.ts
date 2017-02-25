@@ -1,8 +1,8 @@
 import { CheckTreeNodeComponent } from './check-tree-node/check-tree-node.component';
-import { TreeNode, TreeViewMode } from './treenode/tree-node';
+import { TreeNode, TreeViewMode, CheckTreeNode } from './treenode/tree-node';
 import { TreeNodeComponent } from './treenode/treenode.component'
 import { TreeViewComponent } from './tree-view-component'
-import { Component, Input, ContentChildren, QueryList, ViewChildren, AfterViewInit, AfterContentInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'ng2treeview',
@@ -20,6 +20,7 @@ import { Component, Input, ContentChildren, QueryList, ViewChildren, AfterViewIn
                   <check-tree-node *ngFor="let child of nodes" [node]="child" [parentComponent]="this"
                             (onCreated)="onCreatedHandler($event)"                             
                             (onClick)="onClickHandler($event)"
+                            (onChecked)="onCheckHandler($event)"
                             [config]="config"></check-tree-node>
                </div>
             </ul>`
@@ -60,6 +61,12 @@ export class Ng2TreeViewComponent extends TreeViewComponent {
 
   toggle(escalation: boolean) {
 
+  }
+
+  @Output() onChecked = new EventEmitter<CheckTreeNode>()
+  protected onCheckHandler(node: CheckTreeNode) {
+    console.log('Ng2TreeViewComponent.onCheckHandler: ', node)
+    this.onChecked.emit(node);
   }
 
   /* Just playing around with getting child components. It might be helpful in nearest future but I don't know for what now :) */

@@ -1,5 +1,6 @@
+import { CheckTreeNode } from './../treenode/tree-node';
 import { TreeNodeComponent } from './../treenode/treenode.component';
-import { Component, OnInit } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'check-tree-node',
@@ -8,6 +9,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CheckTreeNodeComponent extends TreeNodeComponent {
 
+  @Output() onChecked = new EventEmitter<CheckTreeNode>()
+  protected onCheckedHandler(node: CheckTreeNode) {
+    console.log('CheckTreeNodeComponent.onCheckedHandler: ', this.node)
+    this.onChecked.emit(node);
+  }
 
+  check(node: CheckTreeNode) {
+    console.log('CheckTreeNodeComponent.check. node: ', node)
+    this.onChecked.emit(node);
+  }
 
 }

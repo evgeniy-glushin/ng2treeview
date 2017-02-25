@@ -9,7 +9,7 @@ import { Component, OnInit, Input, SkipSelf, Host, Optional, Output, EventEmitte
   styleUrls: ['./treenode.component.css']
 })
 export class TreeNodeComponent extends TreeViewComponent {
-  @Input() private node: TreeNode
+  @Input() protected node: TreeNode
   @Input() parentComponent: TreeViewComponent
 
   get children() {

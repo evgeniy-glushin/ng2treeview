@@ -7,7 +7,8 @@
     <!--TODO: probably I should move the style separate css file-->
   </a>
 
-  <input type="checkbox" name="checkNode">
+  <!--TODO: consider the another event for checkbox instead of click-->
+  <input type="checkbox" name="checkNode" (click)="check(node)">
   <label for="checkNode">{{node?.text}}</label>
 
   <!--TODO: onblur event conflicts with cancel button click event (blur)="save(nodeText.value, 13, $event.relatedTarget.id)"-->
@@ -18,6 +19,6 @@
   <a *ngIf="config.escalation && !isCreating" href="#" style="font-size: x-small;" (click)="toggle(config.escalation)">expand/collapse all</a>
   <ul *ngIf="node.expanded && hasChildren">
     <check-tree-node *ngFor="let child of node?.children" [node]="child" [parentComponent]="this" (onCreated)="onCreatedHandler($event)"
-      (onClick)="onClickHandler($event)" [config]="config"></check-tree-node>
+      (onClick)="onClickHandler($event)" (onChecked)="onCheckedHandler($event)" [config]="config"></check-tree-node>
   </ul>
 </li>
