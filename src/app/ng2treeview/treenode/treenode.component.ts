@@ -34,6 +34,10 @@ export class TreeNodeComponent extends TreeViewComponent {
     }
   }
 
+  private click(node: TreeNode) {
+    this.onClick.emit(node);
+  }
+
   private escalateToggle(children?: TreeNode[]) {
     console.log('TreeNodeComponent.escalateToggle: ', children)
     if (children)

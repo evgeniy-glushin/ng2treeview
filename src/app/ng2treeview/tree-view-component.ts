@@ -45,6 +45,11 @@ export abstract class TreeViewComponent { //implements AfterViewInit, AfterConte
         console.log(`save. text: ${text}; code: ${keyCode};`);
     }
 
+    @Output() onClick = new EventEmitter<TreeNode>()
+    protected onClickHandler(node: TreeNode) {
+        console.log('BaseTreeViewComponent.onClickHandler: ', node)
+        this.onClick.emit(node);
+    }
 
     @Output() onCreated = new EventEmitter<TreeNode>()
     protected onCreatedHandler(newNode: TreeNode) {

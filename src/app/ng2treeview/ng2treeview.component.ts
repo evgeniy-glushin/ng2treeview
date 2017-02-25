@@ -11,6 +11,7 @@ import { Component, Input, ContentChildren, QueryList, ViewChildren, AfterViewIn
                <treenode *ngFor="let child of nodes" [node]="child" [parentComponent]="this"
                          (onCreated)="onCreatedHandler($event)" 
                          (onRemoved)="onRemovedHandler($event)"
+                         (onClick)="onClickHandler($event)"
                          [config]="config"></treenode>
             </ul>`
 })

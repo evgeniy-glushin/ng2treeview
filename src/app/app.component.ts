@@ -27,4 +27,9 @@ export class AppComponent {
     console.log('AppComponent.onNodeRemoved: ', node)
     this.nodesHistory.push({ name: node.text, event: 'removed' })
   }
+
+  private onNodeClicked(node: TreeNode) {
+    console.log('AppComponent.onNodeClicked: ', node)
+    this.nodesHistory.push({ name: node.text, event: 'clicked' })
+  }
 }
