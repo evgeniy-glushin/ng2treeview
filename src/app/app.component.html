@@ -1,4 +1,4 @@
-<ng2treeview [nodes]="checkNodes" (onCreated)="onNodeCreated($event)" (onRemoved)="onNodeRemoved($event)" 
+<ng2treeview [nodes]="checkNodes" (onCreated)="onNodeCreated($event)" (onRemoved)="onNodeRemoved($event)"
              (onClick)="onNodeClicked($event)" [allowAdding]="adding.checked" [allowRemoving]="removing.checked"
              [escalation]="true" mode="check" (onChecked)="onNodeChecked($event)"></ng2treeview>
 
@@ -10,7 +10,7 @@
 <br/>
 
 
-<ng2treeview [nodes]="nodes" (onCreated)="onNodeCreated($event)" (onRemoved)="onNodeRemoved($event)" 
+<ng2treeview [nodes]="nodes" (onCreated)="onNodeCreated($event)" (onRemoved)="onNodeRemoved($event)"
              (onClick)="onNodeClicked($event)" [allowAdding]="adding.checked" [allowRemoving]="removing.checked"
              [escalation]="true" mode="simple"></ng2treeview>
 
@@ -24,15 +24,12 @@
   </div>
 </div>
 
-<br/>
-<br/>
-
 <div>
   <h3>Configuration:</h3>
 
-  <input #adding type="checkbox" name="Adding" [ngModel]="mAdding">
+  <input id="Adding" #adding type="checkbox" name="Adding" [ngModel]="mAdding" />
   <label for="Adding">allow add</label>
 
-  <input #removing type="checkbox" name="Removing" [ngModel]="mRemoving">
+  <input id="Removing" #removing type="checkbox" name="Removing" [ngModel]="mRemoving" />
   <label for="Removing">allow remove</label>
 </div>

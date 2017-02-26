@@ -24,6 +24,18 @@ export class TreeNodeComponent extends TreeViewComponent {
     return this.parentComponent;
   }
 
+  get folderUrl() {
+    let postfix = '';
+
+    if (this.hasChildren && this.node.expanded) {
+      postfix = '-minus';
+    } else if (this.hasChildren && !this.node.expanded) {
+      postfix = '-plus';
+    }
+
+    return `../../assets/icons/folder${postfix}.svg`;
+  }
+
   toggle(escalation: boolean = false, value?: boolean) {
     console.log(`TreeNodeComponent.toggle. 
                   escalation: ${escalation}; 

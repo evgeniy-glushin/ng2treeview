@@ -1,29 +1,33 @@
-import { CheckTreeNodeComponent } from './check-tree-node/check-tree-node.component';
-import { TreeNode, TreeViewMode, CheckTreeNode } from './treenode/tree-node';
-import { TreeNodeComponent } from './treenode/treenode.component'
-import { TreeViewComponent } from './tree-view-component'
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import {CheckTreeNodeComponent} from './check-tree-node/check-tree-node.component';
+import {TreeNode, TreeViewMode, CheckTreeNode} from './treenode/tree-node';
+import {TreeNodeComponent} from './treenode/treenode.component'
+import {TreeViewComponent} from './tree-view-component'
+import {Component, Input, Output, EventEmitter} from '@angular/core';
 
 @Component({
   selector: 'ng2treeview',
   styleUrls: ['./ng2treeview.component.css'],
-  template: `<ul [ngSwitch]="config.mode">
-               <li *ngIf="config.allowAdding"><a href="#" style="font-size: x-small;" (click)="add()">add</a></li>               
-               <div *ngSwitchCase="'simple'">
-                  <tree-node *ngFor="let child of nodes" [node]="child" [parentComponent]="this"
-                            (onCreated)="onCreatedHandler($event)" 
-                            (onRemoved)="onRemovedHandler($event)"
-                            (onClick)="onClickHandler($event)"
-                            [config]="config"></tree-node>
-               </div>
-               <div *ngSwitchCase="'check'">
-                  <check-tree-node *ngFor="let child of nodes" [node]="child" [parentComponent]="this"
-                            (onCreated)="onCreatedHandler($event)"                             
-                            (onClick)="onClickHandler($event)"
-                            (onChecked)="onCheckHandler($event)"
-                            [config]="config"></check-tree-node>
-               </div>
-            </ul>`
+  template: `
+    <ul [ngSwitch]="config.mode">
+      <li class="list-item" *ngIf="config.allowAdding">
+        <button class="btn" (click)="add()">add</button>
+      </li>
+      <div *ngSwitchCase="'simple'">
+        <tree-node *ngFor="let child of nodes" [node]="child" [parentComponent]="this"
+                   (onCreated)="onCreatedHandler($event)"
+                   (onRemoved)="onRemovedHandler($event)"
+                   (onClick)="onClickHandler($event)"
+                   [config]="config"></tree-node>
+      </div>
+      <div *ngSwitchCase="'check'">
+        <check-tree-node *ngFor="let child of nodes" [node]="child" [parentComponent]="this"
+                         (onCreated)="onCreatedHandler($event)"
+                         (onClick)="onClickHandler($event)"
+                         (onChecked)="onCheckHandler($event)"
+                         [config]="config"></check-tree-node>
+      </div>
+    </ul>
+  `
 })
 export class Ng2TreeViewComponent extends TreeViewComponent {
   @Input() nodes: TreeNode[]
@@ -64,6 +68,7 @@ export class Ng2TreeViewComponent extends TreeViewComponent {
   }
 
   @Output() onChecked = new EventEmitter<CheckTreeNode>()
+
   protected onCheckHandler(node: CheckTreeNode) {
     console.log('Ng2TreeViewComponent.onCheckHandler: ', node)
     this.onChecked.emit(node);
