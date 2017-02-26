@@ -3,7 +3,7 @@ export class TreeNode {
         public text: string,
         public state: NodeState = NodeState.unchanged, //TODO: encapsulate this field for consumer
         public children?: TreeNode[],
-        public expanded: boolean = true) {
+        public expanded = true) {
     }
 }
 
