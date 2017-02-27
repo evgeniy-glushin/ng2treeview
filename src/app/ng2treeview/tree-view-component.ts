@@ -20,7 +20,7 @@ export abstract class TreeViewComponent {
 
     private _node: TreeNode;
     @Input() protected set node(value: TreeNode) {
-        console.log('TreeNodeComponent.setNode', value)
+        // console.log('TreeNodeComponent.setNode', value)
         if (!value.id && !value.text)
             this.state = NodeState.creating;
 

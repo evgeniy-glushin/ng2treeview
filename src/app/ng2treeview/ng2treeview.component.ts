@@ -30,7 +30,39 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
   `
 })
 export class Ng2TreeViewComponent extends TreeViewComponent {
-  @Input() nodes: TreeNode[]
+  private _nodes: TreeNode[];
+  @Input() set nodes(value: TreeNode[]) {
+    console.log('Ng2TreeViewComponent.setNodes: ', value)
+
+    //make sure that id and text props of every node are not empty
+    let [success, errorMsg] = this.haveIdentifiers(value)
+
+    //TODO: make sure that all ids are unique
+
+    if (success)
+      this._nodes = value;
+    else
+      console.error(errorMsg)
+  }
+
+  haveIdentifiers(nodes?: TreeNode[]) {
+    if (nodes)
+      for (let node of nodes) {
+        if (node.id && node.text) {
+          let [success, errorMsg] = this.haveIdentifiers(node.children)
+          if (!success)
+            return [success, errorMsg];
+        }
+        else
+          return [false, `Invalid node found. Id: ${node.id}; Text: ${node.text}`];
+      }
+
+    return [true, ''];
+  }
+
+  get nodes() {
+    return this._nodes;
+  }
 
   @Input() set allowAdding(value: boolean) {
     this.config.allowAdding = value;
