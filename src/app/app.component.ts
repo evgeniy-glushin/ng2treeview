@@ -12,7 +12,7 @@ export class AppComponent {
 
   private checkNodes: CheckTreeNode[] =
   [
-    new CheckTreeNode('1', 'node1', NodeState.unchanged, [], false, true),
+    new CheckTreeNode('1', 'node1', NodeState.unchanged, [], false, false),
     new CheckTreeNode('2', 'node2', NodeState.unchanged, [
       new CheckTreeNode('2.1', 'node21', NodeState.unchanged, [], true, true),
       new CheckTreeNode('2.2', 'node22', NodeState.unchanged, [

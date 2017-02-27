@@ -12,12 +12,29 @@ export class CheckTreeNodeComponent extends TreeNodeComponent {
   @Output() onChecked = new EventEmitter<CheckTreeNode>()
   protected onCheckedHandler(node: CheckTreeNode) {
     console.log('CheckTreeNodeComponent.onCheckedHandler: ', this.node)
+
+    //emit to parents 
+    let children = this.node.children;
+    if (children && children.length) {
+      let allChecked = children.every(n => (n as CheckTreeNode).checked);
+      (this.node as CheckTreeNode).checked = allChecked;
+    }
+
     this.onChecked.emit(node);
   }
 
   check(node: CheckTreeNode) {
     console.log('CheckTreeNodeComponent.check. node: ', node)
+    this.broadcastChildren(node.children);
     this.onChecked.emit(node);
   }
 
+  private broadcastChildren(children?: CheckTreeNode[]) {
+    console.log('CheckTreeNodeComponent.escalateChildren: ', children)
+    if (children)
+      children.forEach(n => {
+        n.checked = (this.node as CheckTreeNode).checked
+        this.broadcastChildren(n.children)
+      })
+  }
 }

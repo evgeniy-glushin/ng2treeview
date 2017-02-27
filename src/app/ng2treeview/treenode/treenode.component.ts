@@ -9,8 +9,18 @@ import { Component, OnInit, Input, SkipSelf, Host, Optional, Output, EventEmitte
   styleUrls: ['./treenode.component.css']
 })
 export class TreeNodeComponent extends TreeViewComponent {
-  @Input() protected node: TreeNode
   @Input() parentComponent: TreeViewComponent
+
+  _node: TreeNode;
+  @Input() protected set node(value: TreeNode) {
+    // console.log('TreeNodeComponent.setNode', value)
+    this._node = value;
+  }
+
+  protected get node() {
+    // console.log('TreeNodeComponent.getNode', this._node)
+    return this._node;
+  }
 
   get children() {
     if (!this.node.children)

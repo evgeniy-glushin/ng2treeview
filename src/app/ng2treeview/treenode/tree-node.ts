@@ -11,7 +11,7 @@ export class CheckTreeNode extends TreeNode {
     constructor(public id: string,
         public text: string,
         public state: NodeState = NodeState.unchanged, //TODO: encapsulate this field for consumer
-        public children?: TreeNode[],
+        public children?: CheckTreeNode[],
         public expanded: boolean = true,
         public checked: boolean = false) {
         super(id, text, state, children, expanded);

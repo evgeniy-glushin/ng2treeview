@@ -8,7 +8,7 @@
   </a>
 
   <!--TODO: consider the another event for checkbox instead of click-->
-  <input id="checkNode" type="checkbox" name="checkNode" (click)="check(node)">
+  <input id="checkNode" type="checkbox" name="checkNode" (change)="check(node)" [(ngModel)]="node.checked">
   <label for="checkNode">{{node?.text}}</label>
 
   <!--TODO: onblur event conflicts with cancel button click event (blur)="save(nodeText.value, 13, $event.relatedTarget.id)"-->
