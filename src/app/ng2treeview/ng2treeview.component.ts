@@ -4,6 +4,8 @@ import { TreeNodeComponent } from './treenode/treenode.component'
 import { TreeViewComponent } from './tree-view-component'
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 
+type Validator = (n: TreeNode) => [boolean, string];
+
 @Component({
   selector: 'ng2treeview',
   styleUrls: ['./ng2treeview.component.css'],
@@ -34,10 +36,24 @@ export class Ng2TreeViewComponent extends TreeViewComponent {
   @Input() set nodes(value: TreeNode[]) {
     console.log('Ng2TreeViewComponent.setNodes: ', value)
 
-    //make sure that id and text props of every node are not empty
-    let [success, errorMsg] = this.haveIdentifiers(value)
+    let emptyValidator: Validator = ({id, text}: TreeNode) => {
+      if (id && text)
+        return [true, ''];
+      else
+        return [false, `Invalid node found. Empty value. Id: ${id}; Text: ${text}`];
+    }
 
-    //TODO: make sure that all ids are unique
+    let uniqeIds = new Set<string>();
+    let uniqueIdValidator: Validator = ({id, text}: TreeNode) => {
+      if (uniqeIds.has(id))
+        return [false, `Invalid node found. Duplicate Id. Id: ${id}; Text: ${text}`];
+      else {
+        uniqeIds.add(id)
+        return [true, ''];
+      }
+    }
+
+    let [success, errorMsg] = this.validate([emptyValidator, uniqueIdValidator], value);
 
     if (success)
       this._nodes = value;
@@ -45,16 +61,18 @@ export class Ng2TreeViewComponent extends TreeViewComponent {
       console.error(errorMsg)
   }
 
-  haveIdentifiers(nodes?: TreeNode[]) {
+  private validate(validators: Validator[], nodes?: TreeNode[]) {
     if (nodes)
       for (let node of nodes) {
-        if (node.id && node.text) {
-          let [success, errorMsg] = this.haveIdentifiers(node.children)
+        for (let validator of validators) {
+          let [success, errorMsg] = validator(node);
           if (!success)
-            return [success, errorMsg];
+            return [success, errorMsg]
         }
-        else
-          return [false, `Invalid node found. Id: ${node.id}; Text: ${node.text}`];
+
+        let [success, errorMsg] = this.validate(validators, node.children)
+        if (!success)
+          return [success, errorMsg];
       }
 
     return [true, ''];
