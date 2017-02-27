@@ -1,8 +1,8 @@
-import {CheckTreeNodeComponent} from './check-tree-node/check-tree-node.component';
-import {TreeNode, TreeViewMode, CheckTreeNode} from './treenode/tree-node';
-import {TreeNodeComponent} from './treenode/treenode.component'
-import {TreeViewComponent} from './tree-view-component'
-import {Component, Input, Output, EventEmitter} from '@angular/core';
+import { CheckTreeNodeComponent } from './check-tree-node/check-tree-node.component';
+import { TreeNode, TreeViewMode, CheckTreeNode } from './treenode/tree-node';
+import { TreeNodeComponent } from './treenode/treenode.component'
+import { TreeViewComponent } from './tree-view-component'
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'ng2treeview',
@@ -48,7 +48,10 @@ export class Ng2TreeViewComponent extends TreeViewComponent {
   }
 
   @Input() set mode(value: TreeViewMode) {
-    //TODO: validate the input value since TS compiler doesn't do that when it comes from markup
+    let supportedModes: TreeViewMode[] = ['simple', 'check'];
+    if (supportedModes.indexOf(value) === -1)
+      console.error(`Unknown treeview mode: ${value}. Please try to use one of existing modes: ${supportedModes.join(' | ')}`);
+
     this.config.mode = value;
     console.log('Ng2TreeViewComponent.escalation: ', value)
   }

@@ -12,20 +12,20 @@ export class AppComponent {
 
   private checkNodes: CheckTreeNode[] =
   [
-    new CheckTreeNode('1', 'node1', NodeState.unchanged, [], false, false),
-    new CheckTreeNode('2', 'node2', NodeState.unchanged, [
-      new CheckTreeNode('2.1', 'node21', NodeState.unchanged, [], true, true),
-      new CheckTreeNode('2.2', 'node22', NodeState.unchanged, [
-        new CheckTreeNode('2.2.1', 'node221', NodeState.unchanged, [], false, true),
+    new CheckTreeNode('1', 'node1', [], false, false),
+    new CheckTreeNode('2', 'node2', [
+      new CheckTreeNode('2.1', 'node21', [], true, true),
+      new CheckTreeNode('2.2', 'node22', [
+        new CheckTreeNode('2.2.1', 'node221', [], false, true),
       ], true, true)
     ], true, true),
-    new CheckTreeNode('3', 'node3', NodeState.unchanged, [], false, true),
-    new CheckTreeNode('4', 'node4', NodeState.unchanged, [
-       new CheckTreeNode('41', 'node41', NodeState.unchanged, [
-          new CheckTreeNode('411', 'node411', NodeState.unchanged, [
-             new CheckTreeNode('411', 'node411', NodeState.unchanged, [], false, true),
-          ], true, true),
-       ], true, true),
+    new CheckTreeNode('3', 'node3', [], false, true),
+    new CheckTreeNode('4', 'node4', [
+      new CheckTreeNode('41', 'node41', [
+        new CheckTreeNode('411', 'node411', [
+          new CheckTreeNode('411', 'node411', [], false, true),
+        ], true, true),
+      ], true, true),
     ], true, true)
   ]
 
@@ -54,7 +54,7 @@ export class AppComponent {
     this.nodesHistory.push({ name: node.text, event: 'clicked' })
   }
 
-  private onNodeChecked(node: CheckTreeNode){
+  private onNodeChecked(node: CheckTreeNode) {
     console.log('AppComponent.onNodeChecked: ', node)
     this.nodesHistory.push({ name: node.text, event: 'checked' })
   }

@@ -3,9 +3,35 @@ import { Output, EventEmitter, ViewChildren, SkipSelf, Host, Optional, Input, Qu
 import { TreeNode, TreeViewConfig, NodeState } from './treenode/tree-node';
 
 //Represents abstraction and basic implementation for tree-like components.  
-export abstract class TreeViewComponent { 
+export abstract class TreeViewComponent {
     //The dafault settings
     @Input() protected config: TreeViewConfig = new TreeViewConfig(true, true, true, 'simple');
+
+    protected state: NodeState;
+
+    protected get hasChildren() {
+        let children = this.node.children;
+        return (children != undefined && children.length > 0);
+    }
+
+    protected get isCreating() {
+        return this.state == NodeState.creating;
+    }
+
+    private _node: TreeNode;
+    @Input() protected set node(value: TreeNode) {
+        console.log('TreeNodeComponent.setNode', value)
+        if (!value.id && !value.text)
+            this.state = NodeState.creating;
+
+        this._node = value;
+    }
+
+    protected get node() {
+        // console.log('TreeNodeComponent.getNode', this._node)
+        return this._node;
+    }
+
 
     //If it looks wierd or unfamiliar for you look into Template Method design pattern.
     abstract get children(): TreeNode[]
@@ -29,7 +55,7 @@ export abstract class TreeViewComponent {
     // expanded: boolean
     private add() {
         //TODO: figure default values out
-        let newNode = new TreeNode("", "", NodeState.creating)
+        let newNode = new TreeNode("", "")
         this.children.push(newNode);
 
         this.toggle(false, true)
@@ -39,7 +65,7 @@ export abstract class TreeViewComponent {
     private save(node: TreeNode, text: string, keyCode = this.ENTER_KEY_CODE) {
         if (text && keyCode == this.ENTER_KEY_CODE) {
             node.text = text;
-            node.state = NodeState.added;
+            this.state = NodeState.added;
             this.onCreated.emit(node);
         }
         console.log(`save. text: ${text}; code: ${keyCode};`);
@@ -57,23 +83,9 @@ export abstract class TreeViewComponent {
         this.onCreated.emit(newNode);
     }
 
-    //TODO: trigger this event in children classes
-    @Output() onCreating = new EventEmitter<TreeNode>()
-    protected onCreatingHandler(newNode: TreeNode) {
-        console.log('BaseTreeViewComponent.onCreatingHandler: ', newNode)
-        this.onCreating.emit(newNode);
-    }
-
     @Output() onRemoved = new EventEmitter<TreeNode>()
     protected onRemovedHandler(node: TreeNode) {
         console.log('BaseTreeViewComponent.onRemovedHandler: ', node)
         this.onRemoved.emit(node);
-    }
-
-    //TODO: trigger this event in children classes
-    @Output() onRemoving = new EventEmitter<TreeNode>()
-    protected onRemovingHandler(node: TreeNode) {
-        console.log('BaseTreeViewComponent.onRemovingHandler: ', node)
-        this.onRemoving.emit(node);
     }
 }

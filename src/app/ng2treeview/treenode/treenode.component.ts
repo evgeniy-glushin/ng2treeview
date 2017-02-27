@@ -10,18 +10,7 @@ import { Component, OnInit, Input, SkipSelf, Host, Optional, Output, EventEmitte
 })
 export class TreeNodeComponent extends TreeViewComponent {
   @Input() parentComponent: TreeViewComponent
-
-  _node: TreeNode;
-  @Input() protected set node(value: TreeNode) {
-    // console.log('TreeNodeComponent.setNode', value)
-    this._node = value;
-  }
-
-  protected get node() {
-    // console.log('TreeNodeComponent.getNode', this._node)
-    return this._node;
-  }
-
+  
   get children() {
     if (!this.node.children)
       this.node.children = []
@@ -72,14 +61,5 @@ export class TreeNodeComponent extends TreeViewComponent {
         n.expanded = this.node.expanded
         this.escalateToggle(n.children)
       })
-  }
-
-  private get hasChildren() {
-    let children = this.node.children;
-    return (children != undefined && children.length > 0);
-  }
-
-  private get isCreating() {
-    return this.node.state == NodeState.creating;
   }
 }

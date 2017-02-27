@@ -11,7 +11,7 @@ export class CheckTreeNodeComponent extends TreeNodeComponent {
 
   @Output() onChecked = new EventEmitter<CheckTreeNode>()
   protected onCheckedHandler(node: CheckTreeNode) {
-    console.log('CheckTreeNodeComponent.onCheckedHandler: ', this.node)
+    console.log('CheckTreeNodeComponent.onCheckedHandler. before emit ', this.node)
 
     //emit to parents 
     let children = this.node.children;
@@ -21,6 +21,7 @@ export class CheckTreeNodeComponent extends TreeNodeComponent {
     }
 
     this.onChecked.emit(node);
+    console.log('CheckTreeNodeComponent.onCheckedHandler: after emit', this.node)
   }
 
   check(node: CheckTreeNode) {
