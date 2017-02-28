@@ -1,5 +1,5 @@
 import { CheckTreeNodeComponent } from './check-tree-node/check-tree-node.component';
-import { TreeNode, TreeViewMode, CheckTreeNode, AddNodeCallback } from './treenode/tree-node';
+import { TreeNode, TreeViewMode, CheckTreeNode, AddNodeCallback, NodeState } from './treenode/tree-node';
 import { TreeNodeComponent } from './treenode/treenode.component'
 import { TreeViewComponent } from './tree-view-component'
 import { Component, Input, Output, EventEmitter } from '@angular/core';
@@ -133,9 +133,30 @@ export class Ng2TreeViewComponent extends TreeViewComponent {
     this.onChecked.emit(node);
   }
 
+  protected onCreatedHandler(newNode: TreeNode) {
+    console.log('Ng2TreeViewComponent.onCreatedHandler: ', newNode)
+
+    this.state = NodeState.unchanged;
+
+    this.onCreated.emit(newNode);
+  }
+
+  protected onRemovedHandler(node: TreeNode) {
+    console.log('Ng2TreeViewComponent.onRemovedHandler: ', node)
+
+    if (this.state == NodeState.creating)
+      this.state = NodeState.unchanged
+
+    this.onRemoved.emit(node);
+  }
+
   protected onCreatingHandler(addFunc: AddNodeCallback) {
     console.log('Ng2TreeViewComponent.onCreatingHandler.', addFunc)
-    addFunc();
+    // make sure that we can't create two and more nodes simultaneously.          
+    if (this.state != NodeState.creating) {
+      this.state = NodeState.creating;
+      addFunc();
+    }
   }
 
   /* Just playing around with getting child components. It might be helpful in nearest future but I don't know for what now :) */

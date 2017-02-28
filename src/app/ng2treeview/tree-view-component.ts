@@ -32,7 +32,6 @@ export abstract class TreeViewComponent {
         return this._node;
     }
 
-
     //If it looks wierd or unfamiliar for you look into Template Method design pattern.
     abstract get children(): TreeNode[]
     removeChild(node: TreeNode) {
@@ -95,8 +94,6 @@ export abstract class TreeViewComponent {
     @Output() protected onCreating = new EventEmitter<AddNodeCallback>()
     protected onCreatingHandler(addCallback: AddNodeCallback) {
         console.log('TreeViewComponent.onCreatingHandler.')
-        //TODO: Perform validation stuff and only then apply addCallback. 
-        //For instance make sure that we can't create two and more nodes simultaneously.          
         return this.onCreating.emit(addCallback);
     }
 }
