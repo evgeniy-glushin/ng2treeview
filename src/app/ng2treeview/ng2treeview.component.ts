@@ -1,5 +1,5 @@
 import { CheckTreeNodeComponent } from './check-tree-node/check-tree-node.component';
-import { TreeNode, TreeViewMode, CheckTreeNode } from './treenode/tree-node';
+import { TreeNode, TreeViewMode, CheckTreeNode, AddNodeCallback } from './treenode/tree-node';
 import { TreeNodeComponent } from './treenode/treenode.component'
 import { TreeViewComponent } from './tree-view-component'
 import { Component, Input, Output, EventEmitter } from '@angular/core';
@@ -17,6 +17,7 @@ type Validator = (n: TreeNode) => [boolean, string];
       <div *ngSwitchCase="'simple'">
         <tree-node *ngFor="let child of nodes" [node]="child" [parentComponent]="this"
                    (onCreated)="onCreatedHandler($event)"
+                   (onCreating)="onCreatingHandler($event)"
                    (onRemoved)="onRemovedHandler($event)"
                    (onClick)="onClickHandler($event)"
                    [config]="config"></tree-node>
@@ -61,9 +62,15 @@ export class Ng2TreeViewComponent extends TreeViewComponent {
       console.error(errorMsg)
   }
 
+  /**
+   * Goes through the nodes and applies validators for each node.
+   * @returns the validation result.
+   */
   private validate(validators: Validator[], nodes?: TreeNode[]) {
+    //TODO: for perfomance perposes we may want to rewrite this without recursion 
     if (nodes)
       for (let node of nodes) {
+        //apply all validators for the node 
         for (let validator of validators) {
           let [success, errorMsg] = validator(node);
           if (!success)
@@ -121,10 +128,14 @@ export class Ng2TreeViewComponent extends TreeViewComponent {
   }
 
   @Output() onChecked = new EventEmitter<CheckTreeNode>()
-
   protected onCheckHandler(node: CheckTreeNode) {
     console.log('Ng2TreeViewComponent.onCheckHandler: ', node)
     this.onChecked.emit(node);
+  }
+
+  protected onCreatingHandler(addFunc: AddNodeCallback) {
+    console.log('Ng2TreeViewComponent.onCreatingHandler.', addFunc)
+    addFunc();
   }
 
   /* Just playing around with getting child components. It might be helpful in nearest future but I don't know for what now :) */

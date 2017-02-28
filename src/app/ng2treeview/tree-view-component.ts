@@ -1,6 +1,6 @@
 import { TreeNodeComponent } from './treenode/treenode.component';
 import { Output, EventEmitter, ViewChildren, SkipSelf, Host, Optional, Input, QueryList, AfterViewInit, AfterContentInit, ContentChildren } from '@angular/core'
-import { TreeNode, TreeViewConfig, NodeState } from './treenode/tree-node';
+import { TreeNode, TreeViewConfig, NodeState, AddNodeCallback } from './treenode/tree-node';
 
 //Represents abstraction and basic implementation for tree-like components.  
 export abstract class TreeViewComponent {
@@ -38,7 +38,7 @@ export abstract class TreeViewComponent {
     removeChild(node: TreeNode) {
         if (this.children) {
             let idx = this.children.indexOf(node);
-            console.log('BaseTreeViewComponent.removeChild. target index: ', idx)
+            console.log('TreeViewComponent.removeChild. target index: ', idx)
             this.children.splice(idx, 1);
             this.onRemoved.emit(node);
         }
@@ -47,18 +47,21 @@ export abstract class TreeViewComponent {
     //If it looks wierd or unfamiliar for you look into Template Method design pattern.
     abstract get parent(): TreeViewComponent
     protected remove(node: TreeNode) {
-        console.log('BaseTreeViewComponent.remove: ', node)
+        console.log('TreeViewComponent.remove: ', node)
         this.parent.removeChild(node);
     }
 
     abstract toggle(escalation: boolean, value?: boolean): void;
-    // expanded: boolean
     private add() {
-        //TODO: figure default values out
-        let newNode = new TreeNode("", "")
-        this.children.push(newNode);
+        let validationResult = this.onCreating.emit(() => {
+            console.log(`TreeViewComponent. add. emit callback`);
 
-        this.toggle(false, true)
+            //TODO: figure default values out
+            let newNode = new TreeNode("", "")
+            this.children.push(newNode);
+
+            this.toggle(false, true)
+        });
     }
 
     private readonly ENTER_KEY_CODE = 13;
@@ -73,19 +76,27 @@ export abstract class TreeViewComponent {
 
     @Output() onClick = new EventEmitter<TreeNode>()
     protected onClickHandler(node: TreeNode) {
-        console.log('BaseTreeViewComponent.onClickHandler: ', node)
+        console.log('TreeViewComponent.onClickHandler: ', node)
         this.onClick.emit(node);
     }
 
     @Output() onCreated = new EventEmitter<TreeNode>()
     protected onCreatedHandler(newNode: TreeNode) {
-        console.log('BaseTreeViewComponent.onCreatedHandler: ', newNode)
+        console.log('TreeViewComponent.onCreatedHandler: ', newNode)
         this.onCreated.emit(newNode);
     }
 
     @Output() onRemoved = new EventEmitter<TreeNode>()
     protected onRemovedHandler(node: TreeNode) {
-        console.log('BaseTreeViewComponent.onRemovedHandler: ', node)
+        console.log('TreeViewComponent.onRemovedHandler: ', node)
         this.onRemoved.emit(node);
+    }
+
+    @Output() protected onCreating = new EventEmitter<AddNodeCallback>()
+    protected onCreatingHandler(addCallback: AddNodeCallback) {
+        console.log('TreeViewComponent.onCreatingHandler.')
+        //TODO: Perform validation stuff and only then apply addCallback. 
+        //For instance make sure that we can't create two and more nodes simultaneously.          
+        return this.onCreating.emit(addCallback);
     }
 }

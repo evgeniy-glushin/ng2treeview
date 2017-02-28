@@ -33,3 +33,5 @@ export class TreeViewConfig {
 
 export type TreeViewMode = 'simple' | 'check'
 
+export type AddNodeCallback = () => void;
+

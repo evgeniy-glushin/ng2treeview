@@ -18,6 +18,6 @@
 
   <ul *ngIf="node.expanded && hasChildren">
     <tree-node *ngFor="let child of node?.children" [node]="child" [parentComponent]="this" (onCreated)="onCreatedHandler($event)"
-              (onRemoved)="onRemovedHandler($event)" (onClick)="onClickHandler($event)" [config]="config"></tree-node>
+      (onCreating)="onCreatingHandler($event)" (onRemoved)="onRemovedHandler($event)" (onClick)="onClickHandler($event)" [config]="config"></tree-node>
   </ul>
 </li>
