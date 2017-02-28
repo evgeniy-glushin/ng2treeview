@@ -23,8 +23,8 @@ export enum NodeState {
 }
 
 export class TreeViewConfig {
-    constructor(public allowAdding: boolean,
-        public allowRemoving: boolean,
+    constructor(public allowAdd: boolean,
+        public allowRemove: boolean,
         public escalation: boolean,
         public mode: TreeViewMode) {
 

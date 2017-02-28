@@ -51,7 +51,7 @@ export abstract class TreeViewComponent {
     }
 
     abstract toggle(escalation: boolean, value?: boolean): void;
-    private add() {
+    protected add() {
         let validationResult = this.onCreating.emit(() => {
             console.log(`TreeViewComponent. add. emit callback`);
 

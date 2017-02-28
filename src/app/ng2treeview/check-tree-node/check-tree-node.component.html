@@ -15,7 +15,7 @@
   <input #nodeText type="text" *ngIf="isCreating" (keydown)="save(node, nodeText.value, $event.keyCode)" />
 
   <!--TODO: replace this shity "add" word with some icon-->
-  <button class="btn" *ngIf="config.allowAdding && !isCreating" (click)="add()">add</button>
+  <button class="btn" *ngIf="config.allowAdd && !isCreating" (click)="add()">add</button>
 
   <button class="btn" *ngIf="node.children?.length && config.escalation && !isCreating" (click)="toggle(config.escalation)">
     {{node.expanded ? 'collapse' : 'expand'}} all

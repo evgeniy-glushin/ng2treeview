@@ -11,7 +11,7 @@ type Validator = (n: TreeNode) => [boolean, string];
   styleUrls: ['./ng2treeview.component.css'],
   template: `
     <ul [ngSwitch]="config.mode">
-      <li class="list-item" *ngIf="config.allowAdding">
+      <li class="list-item" *ngIf="config.allowAdd">
         <button class="btn" (click)="add()">add</button>
       </li>
       <div *ngSwitchCase="'simple'">
@@ -89,14 +89,14 @@ export class Ng2TreeViewComponent extends TreeViewComponent {
     return this._nodes;
   }
 
-  @Input() set allowAdding(value: boolean) {
-    this.config.allowAdding = value;
-    console.log('Ng2TreeViewComponent.allowAdding: ', value)
+  @Input() set allowAdd(value: boolean) {
+    this.config.allowAdd = value;
+    console.log('Ng2TreeViewComponent.allowAdd: ', value)
   }
 
-  @Input() set allowRemoving(value: boolean) {
-    this.config.allowRemoving = value;
-    console.log('Ng2TreeViewComponent.allowRemoving: ', value)
+  @Input() set allowRemove(value: boolean) {
+    this.config.allowRemove = value;
+    console.log('Ng2TreeViewComponent.allowRemove: ', value)
   }
 
   @Input() set escalation(value: boolean) {
@@ -119,12 +119,30 @@ export class Ng2TreeViewComponent extends TreeViewComponent {
   }
 
   get parent() {
-    console.log('TreeNodeComponent.parent')
+    console.log('Ng2TreeViewComponent.parent')
     return this;
   }
 
   toggle(escalation: boolean) {
 
+  }
+
+  removeChild(node: TreeNode) {
+    console.log(`Ng2TreeViewComponent. removeChild.`);
+    if (this.state == NodeState.creating)
+      this.state = NodeState.unchanged;
+    super.removeChild(node)
+  }
+
+  protected add() {
+    console.log(`Ng2TreeViewComponent. add.`);
+
+    if (this.state != NodeState.creating) {
+      //TODO: figure default values out
+      let newNode = new TreeNode("", "")
+      this.children.push(newNode);
+      this.state = NodeState.creating;
+    }
   }
 
   @Output() onChecked = new EventEmitter<CheckTreeNode>()
