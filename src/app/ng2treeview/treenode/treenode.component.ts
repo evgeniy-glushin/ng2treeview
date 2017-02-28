@@ -35,31 +35,7 @@ export class TreeNodeComponent extends TreeViewComponent {
     return `../../assets/icons/folder${postfix}.svg`;
   }
 
-  toggle(escalation: boolean = false, value?: boolean) {
-    console.log(`TreeNodeComponent.toggle. 
-                  escalation: ${escalation}; 
-                  node.expanded: ${this.node.expanded}; 
-                  value: ${value};
-                  children: `, this.node.children)
-
-    this.node.expanded = value != undefined ?
-      value : !this.node.expanded;
-
-    if (escalation) {
-      this.escalateToggle(this.node.children);
-    }
-  }
-
   private click(node: TreeNode) {
     this.onClick.emit(node);
-  }
-
-  private escalateToggle(children?: TreeNode[]) {
-    console.log('TreeNodeComponent.escalateToggle: ', children)
-    if (children)
-      children.forEach(n => {
-        n.expanded = this.node.expanded
-        this.escalateToggle(n.children)
-      })
   }
 }

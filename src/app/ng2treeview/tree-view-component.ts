@@ -1,5 +1,5 @@
 import { TreeNodeComponent } from './treenode/treenode.component';
-import { Output, EventEmitter, ViewChildren, SkipSelf, Host, Optional, Input, QueryList, AfterViewInit, AfterContentInit, ContentChildren } from '@angular/core'
+import { Output, EventEmitter, Input } from '@angular/core'
 import { TreeNode, TreeViewConfig, NodeState, AddNodeCallback } from './treenode/tree-node';
 
 //Represents abstraction and basic implementation for tree-like components.  
@@ -50,7 +50,31 @@ export abstract class TreeViewComponent {
         this.parent.removeChild(node);
     }
 
-    abstract toggle(escalation: boolean, value?: boolean): void;
+    // abstract toggle(escalation: boolean, value?: boolean): void;
+    protected toggle(escalation: boolean = false, value?: boolean) {
+        console.log(`TreeNodeComponent.toggle. 
+                  escalation: ${escalation}; 
+                  node.expanded: ${this.node.expanded}; 
+                  value: ${value};
+                  children: `, this.node.children)
+
+        this.node.expanded = value != undefined ?
+            value : !this.node.expanded;
+
+        if (escalation) {
+            this.escalateToggle(this.node.children);
+        }
+    }
+
+    private escalateToggle(children?: TreeNode[]) {
+        console.log('TreeNodeComponent.escalateToggle: ', children)
+        if (children)
+            children.forEach(n => {
+                n.expanded = this.node.expanded
+                this.escalateToggle(n.children)
+            })
+    }
+
     protected add() {
         let validationResult = this.onCreating.emit(() => {
             console.log(`TreeViewComponent. add. emit callback`);

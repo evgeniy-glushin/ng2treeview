@@ -123,10 +123,6 @@ export class Ng2TreeViewComponent extends TreeViewComponent {
     return this;
   }
 
-  toggle(escalation: boolean) {
-
-  }
-
   removeChild(node: TreeNode) {
     console.log(`Ng2TreeViewComponent. removeChild.`);
     if (this.state == NodeState.creating)
@@ -156,7 +152,7 @@ export class Ng2TreeViewComponent extends TreeViewComponent {
 
     this.state = NodeState.unchanged;
 
-    this.onCreated.emit(newNode);
+    super.onCreatedHandler(newNode);
   }
 
   protected onRemovedHandler(node: TreeNode) {
@@ -165,7 +161,7 @@ export class Ng2TreeViewComponent extends TreeViewComponent {
     if (this.state == NodeState.creating)
       this.state = NodeState.unchanged
 
-    this.onRemoved.emit(node);
+    super.onRemovedHandler(node);
   }
 
   protected onCreatingHandler(addFunc: AddNodeCallback) {
@@ -176,18 +172,4 @@ export class Ng2TreeViewComponent extends TreeViewComponent {
       addFunc();
     }
   }
-
-  /* Just playing around with getting child components. It might be helpful in nearest future but I don't know for what now :) */
-  // @ContentChildren(TreeNodeComponent) contentChildren: QueryList<TreeNodeComponent>;
-  // @ViewChildren(TreeNodeComponent) viewChildren: QueryList<TreeNodeComponent>;
-
-  // ngAfterContentInit() {
-  //   console.log('ngAfterContentInit. contentChildren: ', this.contentChildren.toArray())
-  // }
-
-  // ngAfterViewInit() {
-  //   console.log('ngAfterViewInit. contentChildren: ', this.viewChildren.toArray())
-  //   // this.viewChildren.forEach(child => child.onCreated = this.onCreateHandler)
-
-  // }
 }
