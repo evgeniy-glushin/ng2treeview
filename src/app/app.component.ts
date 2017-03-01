@@ -23,12 +23,29 @@ export class AppComponent {
     new CheckTreeNode('4', 'node4', [
       new CheckTreeNode('41', 'node41', [
         new CheckTreeNode('411', 'node411', [
-          new CheckTreeNode('4111', 'node4111', [], false, true),
+          new CheckTreeNode('', 'node4111', [], false, true),
         ], true, true),
       ], true, true),
     ], true, true)
   ]
 
+  createTree() {
+    let size = 1000;
+
+    let newNodes = [new TreeNode('-1', 'node-1')];
+    for (let i = 0; i < size; i++) {
+      let node = new TreeNode(Math.random().toString(), 'node' + Math.random())
+      newNodes.push(node)
+
+      for (let j = 0; j < size; j++) {
+        let nestedNode = new TreeNode(`${Math.random()}`, `node${Math.random()}`)
+        node.children = [nestedNode]
+        node = nestedNode;
+      }
+    }
+
+    this.nodes = newNodes;
+  }
 
   //TODO: make this strongly typed
   private nodes =

@@ -68,11 +68,16 @@ export abstract class TreeViewComponent {
 
     private escalateToggle(children?: TreeNode[]) {
         console.log('TreeNodeComponent.escalateToggle: ', children)
-        if (children)
-            children.forEach(n => {
-                n.expanded = this.node.expanded
-                this.escalateToggle(n.children)
-            })
+        if (children) {
+            let stack = [...children]
+            while (stack.length) {
+                let node = stack.pop() as TreeNode; //condition in while loop guarantees that it can't be undefined 
+                node.expanded = this.node.expanded
+
+                if (node.children)
+                    stack.push(...node.children)
+            }
+        }      
     }
 
     protected add() {

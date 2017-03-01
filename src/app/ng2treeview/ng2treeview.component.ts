@@ -66,21 +66,21 @@ export class Ng2TreeViewComponent extends TreeViewComponent {
    * Goes through the nodes and applies validators for each node.
    * @returns the validation result.
    */
-  private validate(validators: Validator[], nodes?: TreeNode[]) {
-    //TODO: for perfomance perposes we may want to rewrite this without recursion 
-    if (nodes)
-      for (let node of nodes) {
-        //apply all validators for the node 
-        for (let validator of validators) {
-          let [success, errorMsg] = validator(node);
-          if (!success)
-            return [success, errorMsg]
-        }
+  private validate(validators: Validator[], nodes: TreeNode[]) {
+    let stack = [...nodes];
 
-        let [success, errorMsg] = this.validate(validators, node.children)
+    while (stack.length) {
+      let node = stack.pop() as TreeNode; //condition in while loop guarantees that it can't be undefined 
+
+      for (let validator of validators) {
+        let [success, errorMsg] = validator(node);
         if (!success)
-          return [success, errorMsg];
+          return [success, errorMsg]
       }
+
+      if (node.children)
+        stack.push(...node.children)
+    }
 
     return [true, ''];
   }

@@ -2,7 +2,7 @@ export class TreeNode {
     constructor(public id: string,
         public text: string,
         public children?: TreeNode[],
-        public expanded = true) {
+        public expanded = false) {
     }
 }
 
@@ -10,7 +10,7 @@ export class CheckTreeNode extends TreeNode {
     constructor(public id: string,
         public text: string,
         public children?: CheckTreeNode[],
-        public expanded: boolean = true,
+        public expanded: boolean = false,
         public checked: boolean = false) {
         super(id, text, children, expanded);
     }
