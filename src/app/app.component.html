@@ -1,37 +1,38 @@
 <button (click)="createTree()">create tree</button>
 
-<!--<ng2treeview [nodes]="checkNodes" (onCreated)="onNodeCreated($event)" (onRemoved)="onNodeRemoved($event)"
-             (onClick)="onNodeClicked($event)" [allowAdd]="adding.checked" [allowRemove]="removing.checked"
-             [escalation]="true" mode="check" (onChecked)="onNodeChecked($event)"></ng2treeview>
+<ng2treeview [nodes]="checkNodes" (onCreated)="onNodeCreated($event)" (onRemoved)="onNodeRemoved($event)" (onClick)="onNodeClicked($event)"
+  [allowAdd]="adding.checked" [allowRemove]="removing.checked" [escalation]="escalation.checked" mode="check" (onChecked)="onNodeChecked($event)"></ng2treeview>
 
 
-<br/>
-<br/>
+  <br/>
+  <br/>
 
-<br/>
-<br/>-->
+  <br/>
+  <br/>
 
 
-<ng2treeview [nodes]="nodes" (onCreated)="onNodeCreated($event)" (onRemoved)="onNodeRemoved($event)"
-             (onClick)="onNodeClicked($event)" [allowAdd]="adding.checked" [allowRemove]="removing.checked"
-             [escalation]="true" mode="simple"></ng2treeview>
+  <ng2treeview [nodes]="nodes" (onCreated)="onNodeCreated($event)" (onRemoved)="onNodeRemoved($event)" (onClick)="onNodeClicked($event)"
+    [allowAdd]="adding.checked" [allowRemove]="removing.checked" [escalation]="escalation.checked" mode="simple"></ng2treeview>
 
-<br/>
-<br/>
+    <br/>
+    <br/>
 
-<div>
-  <h3>Tracking:</h3>
-  <div *ngFor="let node of nodesHistory">
-    {{node.name}}: {{node.event}}
-  </div>
-</div>
+    <div>
+      <h3>Tracking:</h3>
+      <div *ngFor="let node of nodesHistory">
+        {{node.name}}: {{node.event}}
+      </div>
+    </div>
 
-<div>
-  <h3>Configuration:</h3>
+    <div>
+      <h3>Configuration:</h3>
 
-  <input id="Adding" #adding type="checkbox" name="Adding" [ngModel]="mAdding" />
-  <label for="Adding">allow add</label>
+      <input id="Adding" #adding type="checkbox" name="Adding" [ngModel]="mAdding" />
+      <label for="Adding">allow add</label>
 
-  <input id="Removing" #removing type="checkbox" name="Removing" [ngModel]="mRemoving" />
-  <label for="Removing">allow remove</label>
-</div>
+      <input id="Removing" #removing type="checkbox" name="Removing" [ngModel]="mRemoving" />
+      <label for="Removing">allow remove</label>
+
+      <input id="Escalation" #escalation type="checkbox" name="Escalation" [ngModel]="mEscalation" />
+      <label for="Escalation">expand/collapse all</label>
+    </div>
