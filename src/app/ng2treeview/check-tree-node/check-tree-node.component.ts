@@ -1,13 +1,29 @@
-import { CheckTreeNode } from './../treenode/tree-node';
+import { CheckTreeNode, ITreeNode } from './../treenode/tree-node';
 import { TreeNodeComponent } from './../treenode/treenode.component';
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, Input } from '@angular/core';
+import { TreeViewComponent } from './../tree-view-component'
 
 @Component({
   selector: 'check-tree-node',
   templateUrl: './check-tree-node.component.html',
   styleUrls: ['./check-tree-node.component.css']
 })
-export class CheckTreeNodeComponent extends TreeNodeComponent {
+export class CheckTreeNodeComponent extends TreeViewComponent<CheckTreeNode, CheckTreeNode> {
+
+  @Input() parentComponent: TreeViewComponent<CheckTreeNode, CheckTreeNode>
+
+  get children() {
+    if (!this.node.children)
+      this.node.children = []
+    console.log('TreeNodeComponent.children', this.node.children)
+    return this.node.children;
+  }
+
+  get parent() {
+    console.log('TreeNodeComponent.parent: ', this.parentComponent)
+    return this.parentComponent;
+  }
+
 
   @Output() onChecked = new EventEmitter<CheckTreeNode>()
   protected onCheckedHandler(node: CheckTreeNode) {
@@ -16,7 +32,7 @@ export class CheckTreeNodeComponent extends TreeNodeComponent {
     //emit to parents 
     let children = this.node.children;
     if (children && children.length) {
-      let allChecked = children.every(n => (n as CheckTreeNode).checked);
+      let allChecked = children.every(n => n.checked);
       (this.node as CheckTreeNode).checked = allChecked;
     }
 
@@ -34,7 +50,7 @@ export class CheckTreeNodeComponent extends TreeNodeComponent {
     console.log('CheckTreeNodeComponent.escalateChildren: ', children)
     if (children)
       children.forEach(n => {
-        n.checked = (this.node as CheckTreeNode).checked
+        n.checked = this.node.checked
         this.broadcastChildren(n.children)
       })
   }

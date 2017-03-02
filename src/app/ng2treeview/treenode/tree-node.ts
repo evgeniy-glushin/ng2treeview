@@ -1,4 +1,11 @@
-export class TreeNode {
+export interface ITreeNode<TChild> {
+    id: string,
+    text: string,
+    children?: TChild[],
+    expanded: boolean
+}
+
+export class TreeNode implements ITreeNode<TreeNode> {
     constructor(public id: string,
         public text: string,
         public children?: TreeNode[],
@@ -6,13 +13,13 @@ export class TreeNode {
     }
 }
 
-export class CheckTreeNode extends TreeNode {
+export class CheckTreeNode implements ITreeNode<CheckTreeNode> {
     constructor(public id: string,
         public text: string,
         public children?: CheckTreeNode[],
         public expanded: boolean = false,
         public checked: boolean = false) {
-        super(id, text, children, expanded);
+        // super(id, text, children, expanded);
     }
 }
 

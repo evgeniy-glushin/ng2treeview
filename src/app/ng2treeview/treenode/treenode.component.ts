@@ -8,8 +8,8 @@ import { Component, OnInit, Input, SkipSelf, Host, Optional, Output, EventEmitte
   templateUrl: './treenode.component.html',
   styleUrls: ['./treenode.component.css']
 })
-export class TreeNodeComponent extends TreeViewComponent {
-  @Input() parentComponent: TreeViewComponent
+export class TreeNodeComponent extends TreeViewComponent<TreeNode, TreeNode> {
+  @Input() parentComponent: TreeViewComponent<TreeNode, TreeNode>
   
   get children() {
     if (!this.node.children)
@@ -21,21 +21,5 @@ export class TreeNodeComponent extends TreeViewComponent {
   get parent() {
     console.log('TreeNodeComponent.parent: ', this.parentComponent)
     return this.parentComponent;
-  }
-
-  get folderUrl() {
-    let postfix = '';
-
-    if (this.hasChildren && this.node.expanded) {
-      postfix = '-minus';
-    } else if (this.hasChildren && !this.node.expanded) {
-      postfix = '-plus';
-    }
-
-    return `../../assets/icons/folder${postfix}.svg`;
-  }
-
-  private click(node: TreeNode) {
-    this.onClick.emit(node);
   }
 }

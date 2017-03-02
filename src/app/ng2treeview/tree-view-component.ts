@@ -1,9 +1,9 @@
 import { TreeNodeComponent } from './treenode/treenode.component';
 import { Output, EventEmitter, Input } from '@angular/core'
-import { TreeNode, TreeViewConfig, NodeState, AddNodeCallback } from './treenode/tree-node';
+import { TreeNode, TreeViewConfig, NodeState, AddNodeCallback, ITreeNode } from './treenode/tree-node';
 
 //Represents abstraction and basic implementation for tree-like components.  
-export abstract class TreeViewComponent {
+export abstract class TreeViewComponent<TChild extends ITreeNode<TChild>, TNode extends ITreeNode<TChild>> {
     //The dafault settings
     @Input() protected config: TreeViewConfig = new TreeViewConfig(true, true, true, 'simple');
 
@@ -18,8 +18,8 @@ export abstract class TreeViewComponent {
         return this.state == NodeState.creating;
     }
 
-    private _node: TreeNode;
-    @Input() protected set node(value: TreeNode) {
+    private _node: TNode;
+    @Input() protected set node(value: TNode) {
         // console.log('TreeNodeComponent.setNode', value)
         if (!value.id && !value.text)
             this.state = NodeState.creating;
@@ -44,7 +44,7 @@ export abstract class TreeViewComponent {
     }
 
     //If it looks wierd or unfamiliar for you look into Template Method design pattern.
-    abstract get parent(): TreeViewComponent
+    abstract get parent(): TreeViewComponent<TChild, TNode>
     protected remove(node: TreeNode) {
         console.log('TreeViewComponent.remove: ', node)
         this.parent.removeChild(node);
@@ -66,18 +66,18 @@ export abstract class TreeViewComponent {
         }
     }
 
-    private escalateToggle(children?: TreeNode[]) {
+    private escalateToggle(children?: TChild[]) {
         console.log('TreeNodeComponent.escalateToggle: ', children)
         if (children) {
             let stack = [...children]
             while (stack.length) {
-                let node = stack.pop() as TreeNode; //condition in while loop guarantees that it can't be undefined 
+                let node = stack.pop() as ITreeNode<TChild>; //condition in while loop guarantees that it can't be undefined 
                 node.expanded = this.node.expanded
 
                 if (node.children)
                     stack.push(...node.children)
             }
-        }      
+        }
     }
 
     protected add() {
@@ -100,6 +100,23 @@ export abstract class TreeViewComponent {
             this.onCreated.emit(node);
         }
         console.log(`save. text: ${text}; code: ${keyCode};`);
+    }
+
+
+    protected get folderUrl() {
+        let postfix = '';
+
+        if (this.hasChildren && this.node.expanded) {
+            postfix = '-minus';
+        } else if (this.hasChildren && !this.node.expanded) {
+            postfix = '-plus';
+        }
+
+        return `../../assets/icons/folder${postfix}.svg`;
+    }
+
+    protected click(node: TreeNode) {
+        this.onClick.emit(node);
     }
 
     @Output() onClick = new EventEmitter<TreeNode>()

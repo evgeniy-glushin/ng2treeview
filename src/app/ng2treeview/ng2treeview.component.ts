@@ -1,5 +1,5 @@
 import { CheckTreeNodeComponent } from './check-tree-node/check-tree-node.component';
-import { TreeNode, TreeViewMode, CheckTreeNode, AddNodeCallback, NodeState } from './treenode/tree-node';
+import { TreeNode, TreeViewMode, CheckTreeNode, AddNodeCallback, NodeState, ITreeNode } from './treenode/tree-node';
 import { TreeNodeComponent } from './treenode/treenode.component'
 import { TreeViewComponent } from './tree-view-component'
 import { Component, Input, Output, EventEmitter } from '@angular/core';
@@ -32,7 +32,7 @@ type Validator = (n: TreeNode) => [boolean, string];
     </ul>
   `
 })
-export class Ng2TreeViewComponent extends TreeViewComponent {
+export class Ng2TreeViewComponent extends TreeViewComponent<TreeNode, TreeNode> {
   private _nodes: TreeNode[];
   @Input() set nodes(value: TreeNode[]) {
     console.log('Ng2TreeViewComponent.setNodes: ', value)
