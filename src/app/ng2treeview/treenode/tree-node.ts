@@ -1,8 +1,11 @@
-export interface ITreeNode<TChild> {
+export interface ITreeNodeBase{
     id: string,
     text: string,
-    children?: TChild[],
-    expanded: boolean
+    expanded: boolean    
+}
+
+export interface ITreeNode<TChild> extends ITreeNodeBase {
+    children?: ITreeNode<TChild>[],
 }
 
 export class TreeNode implements ITreeNode<TreeNode> {
@@ -41,4 +44,16 @@ export class TreeViewConfig {
 export type TreeViewMode = 'simple' | 'check'
 
 export type AddNodeCallback = () => void;
+
+export function createTreeNode(mode: TreeViewMode) {
+    switch (mode) {
+        case 'simple':
+            return new TreeNode('', '')
+        case 'check':
+            return new CheckTreeNode('', '')
+
+        default:
+            throw `Unknown mode: ${mode};`;
+    }
+}
 

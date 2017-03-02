@@ -8,9 +8,9 @@ import { TreeViewComponent } from './../tree-view-component'
   templateUrl: './check-tree-node.component.html',
   styleUrls: ['./check-tree-node.component.css']
 })
-export class CheckTreeNodeComponent extends TreeViewComponent<CheckTreeNode, CheckTreeNode> {
+export class CheckTreeNodeComponent extends TreeViewComponent<CheckTreeNode> {
 
-  @Input() parentComponent: TreeViewComponent<CheckTreeNode, CheckTreeNode>
+  @Input() parentComponent: TreeViewComponent<CheckTreeNode>
 
   get children() {
     if (!this.node.children)
@@ -33,7 +33,7 @@ export class CheckTreeNodeComponent extends TreeViewComponent<CheckTreeNode, Che
     let children = this.node.children;
     if (children && children.length) {
       let allChecked = children.every(n => n.checked);
-      (this.node as CheckTreeNode).checked = allChecked;
+      this.node.checked = allChecked;
     }
 
     this.onChecked.emit(node);

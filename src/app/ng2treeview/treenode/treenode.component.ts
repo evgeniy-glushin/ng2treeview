@@ -8,8 +8,8 @@ import { Component, OnInit, Input, SkipSelf, Host, Optional, Output, EventEmitte
   templateUrl: './treenode.component.html',
   styleUrls: ['./treenode.component.css']
 })
-export class TreeNodeComponent extends TreeViewComponent<TreeNode, TreeNode> {
-  @Input() parentComponent: TreeViewComponent<TreeNode, TreeNode>
+export class TreeNodeComponent extends TreeViewComponent<TreeNode> {
+  @Input() parentComponent: TreeViewComponent<TreeNode>
   
   get children() {
     if (!this.node.children)
