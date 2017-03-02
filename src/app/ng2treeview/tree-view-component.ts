@@ -82,6 +82,7 @@ export abstract class TreeViewComponent<TNode extends ITreeNode<TNode>> {
 
 
     protected add() {
+        console.log(`TreeViewComponent. add was called.`);
         let validationResult = this.onCreating.emit(() => {
             console.log(`TreeViewComponent. add. emit callback`);
 

@@ -25,6 +25,8 @@ type Validator = (n: TreeNode) => [boolean, string];
       <div *ngSwitchCase="'check'">
         <check-tree-node *ngFor="let child of nodes" [node]="child" [parentComponent]="this"
                          (onCreated)="onCreatedHandler($event)"
+                         (onCreating)="onCreatingHandler($event)"
+                         (onRemoved)="onRemovedHandler($event)"
                          (onClick)="onClickHandler($event)"
                          (onChecked)="onCheckHandler($event)"
                          [config]="config"></check-tree-node>
