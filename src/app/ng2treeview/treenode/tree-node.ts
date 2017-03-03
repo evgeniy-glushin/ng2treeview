@@ -1,7 +1,8 @@
 export interface ITreeNodeBase{
     id: string,
     text: string,
-    expanded: boolean    
+    expanded: boolean,
+    parent?: ITreeNodeBase    
 }
 
 export interface ITreeNode<TChild> extends ITreeNodeBase {
@@ -9,14 +10,18 @@ export interface ITreeNode<TChild> extends ITreeNodeBase {
 }
 
 export class TreeNode implements ITreeNode<TreeNode> {
+    parent?: TreeNode
+    
     constructor(public id: string,
         public text: string,
         public children?: TreeNode[],
         public expanded = false) {
-    }
+    }     
 }
 
 export class CheckTreeNode implements ITreeNode<CheckTreeNode> {
+    parent?: TreeNode 
+    
     constructor(public id: string,
         public text: string,
         public children?: CheckTreeNode[],
