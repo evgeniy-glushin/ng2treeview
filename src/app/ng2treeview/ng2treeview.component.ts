@@ -56,16 +56,13 @@ export class Ng2TreeViewComponent extends TreeViewComponent<ITreeNodeBase> {
         return [true, ''];
       }
     }
-
-    let prevNode: TreeNode = value[0];
-    let parentSetter: Processor = (node: TreeNode) => {
-      if (!node.parent && prevNode) {
-        node.parent = prevNode;
-        prevNode = node;
-      }
+  
+    let setParent: Processor = (node: TreeNode) => {
+      if (node.children) 
+        node.children.forEach(child => child.parent = node)
     }
 
-    let [success, errorMsg] = this.depthFirstTraversal([emptyValidator, uniqueIdValidator], [parentSetter], value);
+    let [success, errorMsg] = this.depthFirstTraversal(value, [emptyValidator, uniqueIdValidator], [setParent]);
 
     console.log('after depthFirstTraversal ', value)
 
@@ -79,7 +76,7 @@ export class Ng2TreeViewComponent extends TreeViewComponent<ITreeNodeBase> {
    * Goes through the nodes and applies validators for each node.
    * @returns the validation result.
    */
-  private depthFirstTraversal(validators: Validator[], processors: Processor[], nodes: TreeNode[]) {
+  private depthFirstTraversal(nodes: TreeNode[], validators: Validator[], processors: Processor[]) {
     let stack = [...nodes];
 
     while (stack.length) {
