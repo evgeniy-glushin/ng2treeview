@@ -1,12 +1,12 @@
-import { TreeNode, NodeState } from './tree-node';
-import { TreeViewComponent } from './../tree-view-component'
+import { TreeNode, NodeState } from './../tree-node';
+import { TreeViewComponent } from './../tree-node-component'
 import { Component, OnInit, Input, SkipSelf, Host, Optional, Output, EventEmitter } from '@angular/core';
 // TODO: remove unused imports
 
 @Component({
   selector: 'tree-node',
-  templateUrl: './treenode.component.html',
-  styleUrls: ['./treenode.component.css']
+  templateUrl: './text-tree-node.component.html',
+  styleUrls: ['./text-tree-node.component.css']
 })
 export class TreeNodeComponent extends TreeViewComponent<TreeNode> {
   @Input() parentComponent: TreeViewComponent<TreeNode>

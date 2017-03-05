@@ -1,6 +1,5 @@
-import { TreeNodeComponent } from './treenode/treenode.component';
 import { Output, EventEmitter, Input } from '@angular/core'
-import { TreeNode, TreeViewConfig, NodeState, AddNodeCallback, ITreeNode, createTreeNode } from './treenode/tree-node';
+import { TreeNode, TreeViewConfig, NodeState, AddNodeCallback, ITreeNode, createTreeNode } from './tree-node';
 
 //Represents abstraction and basic implementation for tree-like components.  
 export abstract class TreeViewComponent<TNode extends ITreeNode<TNode>> {
@@ -20,7 +19,6 @@ export abstract class TreeViewComponent<TNode extends ITreeNode<TNode>> {
 
     private _node: TNode;
     @Input() protected set node(value: TNode) {
-        // console.log('TreeNodeComponent.setNode', value)
         if (!value.id && !value.text)
             this.state = NodeState.creating;
 
@@ -28,7 +26,6 @@ export abstract class TreeViewComponent<TNode extends ITreeNode<TNode>> {
     }
 
     protected get node() {
-        // console.log('TreeNodeComponent.getNode', this._node)
         return this._node;
     }
 
@@ -52,12 +49,6 @@ export abstract class TreeViewComponent<TNode extends ITreeNode<TNode>> {
 
     // abstract toggle(escalation: boolean, value?: boolean): void;
     protected toggle(escalation: boolean = false, value?: boolean) {
-        console.log(`TreeNodeComponent.toggle. 
-                  escalation: ${escalation}; 
-                  node.expanded: ${this.node.expanded}; 
-                  value: ${value};
-                  children: `, this.node.children)
-
         this.node.expanded = value != undefined ?
             value : !this.node.expanded;
 
@@ -67,7 +58,6 @@ export abstract class TreeViewComponent<TNode extends ITreeNode<TNode>> {
     }
 
     private escalateToggle(children?: ITreeNode<TNode>[]) {
-        console.log('TreeNodeComponent.escalateToggle: ', children)
         if (children) {
             let stack = [...children]
             while (stack.length) {

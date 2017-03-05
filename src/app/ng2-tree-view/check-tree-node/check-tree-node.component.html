@@ -8,8 +8,11 @@
   </a>
 
   <!--TODO: consider the another event for checkbox instead of click-->
-  <input id="checkNode" type="checkbox" name="checkNode" (change)="check(node)" [(ngModel)]="node.checked">
-  <label for="checkNode">{{node?.text}}</label>
+
+  <label>
+    <input type="checkbox" name="checkNode" (change)="check(node)" [(ngModel)]="node.checked">
+    {{node?.text}}
+  </label>
 
   <!--TODO: onblur event conflicts with cancel button click event (blur)="save(nodeText.value, 13, $event.relatedTarget.id)"-->
   <input #nodeText type="text" *ngIf="isCreating" (keydown)="save(node, nodeText.value, $event.keyCode)" />
@@ -24,7 +27,8 @@
   </button>
 
   <ul *ngIf="node.expanded && hasChildren">
-    <check-tree-node *ngFor="let child of node?.children" [node]="child" [parentComponent]="this" (onCreating)="onCreatingHandler($event)" (onRemoved)="onRemovedHandler($event)"
-      (onCreated)="onCreatedHandler($event)" (onClick)="onClickHandler($event)" (onChecked)="onCheckedHandler($event)" [config]="config"></check-tree-node>
+    <check-tree-node *ngFor="let child of node?.children" [node]="child" [parentComponent]="this" (onCreating)="onCreatingHandler($event)"
+      (onRemoved)="onRemovedHandler($event)" (onCreated)="onCreatedHandler($event)" (onClick)="onClickHandler($event)" (onChecked)="onCheckedHandler($event)"
+      [config]="config"></check-tree-node>
   </ul>
 </li>

@@ -1,7 +1,6 @@
-import { CheckTreeNode, ITreeNode } from './../treenode/tree-node';
-import { TreeNodeComponent } from './../treenode/treenode.component';
+import { CheckTreeNode, ITreeNode } from './../tree-node';
 import { Component, Output, EventEmitter, Input } from '@angular/core';
-import { TreeViewComponent } from './../tree-view-component'
+import { TreeViewComponent } from './../tree-node-component'
 
 @Component({
   selector: 'check-tree-node',

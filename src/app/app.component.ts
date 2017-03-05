@@ -1,6 +1,6 @@
-import { TreeNode, CheckTreeNode, NodeState } from './ng2treeview/treenode/tree-node';
+import { TreeNode, CheckTreeNode, NodeState } from './ng2-tree-view/tree-node';
 import { Component } from '@angular/core';
-import { Ng2TreeViewComponent } from './ng2treeview/ng2treeview.component'
+import { Ng2TreeViewComponent } from './ng2-tree-view/ng2-tree-view.component'
 
 @Component({
   selector: 'app-root',
@@ -8,7 +8,6 @@ import { Ng2TreeViewComponent } from './ng2treeview/ng2treeview.component'
 })
 export class AppComponent {
   title = 'app works!';
-
 
   private checkNodes: CheckTreeNode[] =
   [
@@ -30,7 +29,7 @@ export class AppComponent {
   ]
 
   createTree() {
-    let size = 1000;
+    let size = 300;
 
     let newNodes = [new TreeNode('-1', 'node-1')];
     for (let i = 0; i < size; i++) {
@@ -62,6 +61,7 @@ export class AppComponent {
   }
 
   private onNodeRemoved(node: TreeNode) {
+    // node.parent
     console.log('AppComponent.onNodeRemoved: ', node)
     this.nodesHistory.push({ name: node.text, event: 'removed' })
   }

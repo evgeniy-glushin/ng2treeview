@@ -1,15 +1,14 @@
 import { CheckTreeNodeComponent } from './check-tree-node/check-tree-node.component';
-import { TreeNode, TreeViewMode, CheckTreeNode, AddNodeCallback, NodeState, ITreeNode, ITreeNodeBase } from './treenode/tree-node';
-import { TreeNodeComponent } from './treenode/treenode.component'
-import { TreeViewComponent } from './tree-view-component'
+import { TreeNode, TreeViewMode, CheckTreeNode, AddNodeCallback, NodeState, ITreeNode, ITreeNodeBase } from './tree-node';
+import { TreeViewComponent } from './tree-node-component'
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 
-type Validator = (node: TreeNode) => [boolean, string];
-type Processor = (node: TreeNode) => void;
+type Validator = (node: ITreeNodeBase) => [boolean, string];
+type Processor = (node: ITreeNodeBase) => void;
 
 @Component({
   selector: 'ng2treeview',
-  styleUrls: ['./ng2treeview.component.css'],
+  styleUrls: ['./ng2-tree-view.component.css'],
   template: `
     <ul [ngSwitch]="config.mode">
       <li class="list-item" *ngIf="config.allowAdd">
@@ -36,11 +35,11 @@ type Processor = (node: TreeNode) => void;
   `
 })
 export class Ng2TreeViewComponent extends TreeViewComponent<ITreeNodeBase> {
-  private _nodes: TreeNode[];
-  @Input() set nodes(value: TreeNode[]) {
+  private _nodes: ITreeNode<ITreeNodeBase>[];
+  @Input() set nodes(value: ITreeNode<ITreeNodeBase>[]) {
     console.log('Ng2TreeViewComponent.setNodes: ', value)
 
-    let emptyValidator: Validator = ({id, text}: TreeNode) => {
+    let emptyValidator: Validator = ({id, text}: ITreeNodeBase) => {
       if (id && text)
         return [true, ''];
       else
@@ -48,7 +47,7 @@ export class Ng2TreeViewComponent extends TreeViewComponent<ITreeNodeBase> {
     }
 
     let uniqeIds = new Set<string>();
-    let uniqueIdValidator: Validator = ({id, text}: TreeNode) => {
+    let uniqueIdValidator: Validator = ({id, text}: ITreeNodeBase) => {
       if (uniqeIds.has(id))
         return [false, `Invalid node found. Duplicate Id. Id: ${id}; Text: ${text}`];
       else {
@@ -56,9 +55,9 @@ export class Ng2TreeViewComponent extends TreeViewComponent<ITreeNodeBase> {
         return [true, ''];
       }
     }
-  
-    let setParent: Processor = (node: TreeNode) => {
-      if (node.children) 
+
+    let setParent: Processor = (node: ITreeNode<ITreeNodeBase>) => {
+      if (node.children)
         node.children.forEach(child => child.parent = node)
     }
 
@@ -76,7 +75,7 @@ export class Ng2TreeViewComponent extends TreeViewComponent<ITreeNodeBase> {
    * Goes through the nodes and applies validators for each node.
    * @returns the validation result.
    */
-  private depthFirstTraversal(nodes: TreeNode[], validators: Validator[], processors: Processor[]) {
+  private depthFirstTraversal(nodes: ITreeNode<ITreeNodeBase>[], validators: Validator[], processors: Processor[]) {
     let stack = [...nodes];
 
     while (stack.length) {
@@ -135,7 +134,7 @@ export class Ng2TreeViewComponent extends TreeViewComponent<ITreeNodeBase> {
     return this;
   }
 
-  removeChild(node: TreeNode) {
+  removeChild(node: ITreeNode<ITreeNodeBase>) {
     console.log(`Ng2TreeViewComponent. removeChild.`);
     if (this.state == NodeState.creating)
       this.state = NodeState.unchanged;
@@ -159,7 +158,7 @@ export class Ng2TreeViewComponent extends TreeViewComponent<ITreeNodeBase> {
     this.onChecked.emit(node);
   }
 
-  protected onCreatedHandler(newNode: TreeNode) {
+  protected onCreatedHandler(newNode: ITreeNode<ITreeNodeBase>) {
     console.log('Ng2TreeViewComponent.onCreatedHandler: ', newNode)
 
     this.state = NodeState.unchanged;
@@ -167,7 +166,7 @@ export class Ng2TreeViewComponent extends TreeViewComponent<ITreeNodeBase> {
     super.onCreatedHandler(newNode);
   }
 
-  protected onRemovedHandler(node: TreeNode) {
+  protected onRemovedHandler(node: ITreeNode<ITreeNodeBase>) {
     console.log('Ng2TreeViewComponent.onRemovedHandler: ', node)
 
     if (this.state == NodeState.creating)
