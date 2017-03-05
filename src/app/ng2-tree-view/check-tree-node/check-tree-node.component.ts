@@ -1,6 +1,6 @@
 import { CheckTreeNode, ITreeNode } from './../tree-node';
 import { Component, Output, EventEmitter, Input } from '@angular/core';
-import { TreeViewComponent } from './../tree-node-component'
+import { TreeViewComponent } from './../tree-node-component';
 
 @Component({
   selector: 'check-tree-node',
@@ -9,24 +9,24 @@ import { TreeViewComponent } from './../tree-node-component'
 })
 export class CheckTreeNodeComponent extends TreeViewComponent<CheckTreeNode> {
 
-  @Input() parentComponent: TreeViewComponent<CheckTreeNode>
+  @Input() parentComponent: TreeViewComponent<CheckTreeNode>;
 
   get children() {
     if (!this.node.children)
-      this.node.children = []
-    console.log('TreeNodeComponent.children', this.node.children)
+      this.node.children = [];
+    console.log('TreeNodeComponent.children', this.node.children);
     return this.node.children;
   }
 
   get parent() {
-    console.log('TreeNodeComponent.parent: ', this.parentComponent)
+    console.log('TreeNodeComponent.parent: ', this.parentComponent);
     return this.parentComponent;
   }
 
 
-  @Output() onChecked = new EventEmitter<CheckTreeNode>()
+  @Output() onChecked = new EventEmitter<CheckTreeNode>();
   protected onCheckedHandler(node: CheckTreeNode) {
-    console.log('CheckTreeNodeComponent.onCheckedHandler. before emit ', this.node)
+    console.log('CheckTreeNodeComponent.onCheckedHandler. before emit ', this.node);
 
     //emit to parents 
     let children = this.node.children;
@@ -36,21 +36,21 @@ export class CheckTreeNodeComponent extends TreeViewComponent<CheckTreeNode> {
     }
 
     this.onChecked.emit(node);
-    console.log('CheckTreeNodeComponent.onCheckedHandler: after emit', this.node)
+    console.log('CheckTreeNodeComponent.onCheckedHandler: after emit', this.node);
   }
 
   check(node: CheckTreeNode) {
-    console.log('CheckTreeNodeComponent.check. node: ', node)
+    console.log('CheckTreeNodeComponent.check. node: ', node);
     this.broadcastChildren(node.children);
     this.onChecked.emit(node);
   }
 
   private broadcastChildren(children?: CheckTreeNode[]) {
-    console.log('CheckTreeNodeComponent.escalateChildren: ', children)
+    console.log('CheckTreeNodeComponent.escalateChildren: ', children);
     if (children)
       children.forEach(n => {
-        n.checked = this.node.checked
-        this.broadcastChildren(n.children)
-      })
+        n.checked = this.node.checked;
+        this.broadcastChildren(n.children);
+      });
   }
 }

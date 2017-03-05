@@ -1,33 +1,32 @@
 export interface ITreeNodeBase{
-    id: string,
-    text: string,
-    expanded: boolean,
-    parent?: ITreeNodeBase    
+    id: string;
+    text: string;
+    expanded: boolean;
+    parent?: ITreeNodeBase;
 }
 
 export interface ITreeNode<TChild> extends ITreeNodeBase {
-    children?: ITreeNode<TChild>[],
+    children?: ITreeNode<TChild>[];
 }
 
-export class TreeNode implements ITreeNode<TreeNode> {
-    parent?: TreeNode
-    
+export class TextTreeNode implements ITreeNode<TextTreeNode> {
+    parent?: TextTreeNode;
+
     constructor(public id: string,
         public text: string,
-        public children?: TreeNode[],
+        public children?: TextTreeNode[],
         public expanded = false) {
-    }     
+    }
 }
 
 export class CheckTreeNode implements ITreeNode<CheckTreeNode> {
-    parent?: TreeNode 
-    
+    parent?: TextTreeNode;
+
     constructor(public id: string,
         public text: string,
         public children?: CheckTreeNode[],
-        public expanded: boolean = false,
-        public checked: boolean = false) {
-        // super(id, text, children, expanded);
+        public expanded = false,
+        public checked = false) {
     }
 }
 
@@ -46,19 +45,19 @@ export class TreeViewConfig {
     }
 }
 
-export type TreeViewMode = 'simple' | 'check'
+export type TreeViewMode = 'simple' | 'check';
 
 export type AddNodeCallback = () => void;
 
 export function createTreeNode(mode: TreeViewMode) {
     switch (mode) {
         case 'simple':
-            return new TreeNode('', '')
+            return new TextTreeNode('', '');
         case 'check':
-            return new CheckTreeNode('', '')
+            return new CheckTreeNode('', '');
 
         default:
-            throw `Unknown mode: ${mode};`;
+            throw new Error(`Unknown mode: ${mode};`);
     }
 }
 

@@ -1,4 +1,4 @@
-import { TreeNode, CheckTreeNode, NodeState } from './ng2-tree-view/tree-node';
+import { TextTreeNode, CheckTreeNode, NodeState } from './ng2-tree-view/tree-node';
 import { Component } from '@angular/core';
 import { Ng2TreeViewComponent } from './ng2-tree-view/ng2-tree-view.component'
 
@@ -31,13 +31,13 @@ export class AppComponent {
   createTree() {
     let size = 300;
 
-    let newNodes = [new TreeNode('-1', 'node-1')];
+    let newNodes = [new TextTreeNode('-1', 'node-1')];
     for (let i = 0; i < size; i++) {
-      let node = new TreeNode(Math.random().toString(), 'node' + Math.random())
+      let node = new TextTreeNode(Math.random().toString(), 'node' + Math.random())
       newNodes.push(node)
 
       for (let j = 0; j < size; j++) {
-        let nestedNode = new TreeNode(`${Math.random()}`, `node${Math.random()}`)
+        let nestedNode = new TextTreeNode(`${Math.random()}`, `node${Math.random()}`)
         node.children = [nestedNode]
         node = nestedNode;
       }
@@ -55,18 +55,18 @@ export class AppComponent {
   ]
 
   nodesHistory: any[] = []
-  private onNodeCreated(newNode: TreeNode) {
+  private onNodeCreated(newNode: TextTreeNode) {
     console.log('AppComponent.onNodeCreated: ', newNode)
     this.nodesHistory.push({ name: newNode.text, event: 'created' })
   }
 
-  private onNodeRemoved(node: TreeNode) {
+  private onNodeRemoved(node: TextTreeNode) {
     // node.parent
     console.log('AppComponent.onNodeRemoved: ', node)
     this.nodesHistory.push({ name: node.text, event: 'removed' })
   }
 
-  private onNodeClicked(node: TreeNode) {
+  private onNodeClicked(node: TextTreeNode) {
     console.log('AppComponent.onNodeClicked: ', node)
     this.nodesHistory.push({ name: node.text, event: 'clicked' })
   }

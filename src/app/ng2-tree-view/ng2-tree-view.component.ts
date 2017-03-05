@@ -1,5 +1,5 @@
 import { CheckTreeNodeComponent } from './check-tree-node/check-tree-node.component';
-import { TreeNode, TreeViewMode, CheckTreeNode, AddNodeCallback, NodeState, ITreeNode, ITreeNodeBase } from './tree-node';
+import { TextTreeNode, TreeViewMode, CheckTreeNode, AddNodeCallback, NodeState, ITreeNode, ITreeNodeBase } from './tree-node';
 import { TreeViewComponent } from './tree-node-component'
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 
@@ -15,12 +15,12 @@ type Processor = (node: ITreeNodeBase) => void;
         <button class="btn" (click)="add()">add</button>
       </li>
       <div *ngSwitchCase="'simple'">
-        <tree-node *ngFor="let child of nodes" [node]="child" [parentComponent]="this"
+        <text-tree-node *ngFor="let child of nodes" [node]="child" [parentComponent]="this"
                    (onCreated)="onCreatedHandler($event)"
                    (onCreating)="onCreatingHandler($event)"
                    (onRemoved)="onRemovedHandler($event)"
                    (onClick)="onClickHandler($event)"
-                   [config]="config"></tree-node>
+                   [config]="config"></text-tree-node>
       </div>
       <div *ngSwitchCase="'check'">
         <check-tree-node *ngFor="let child of nodes" [node]="child" [parentComponent]="this"
@@ -51,14 +51,14 @@ export class Ng2TreeViewComponent extends TreeViewComponent<ITreeNodeBase> {
       if (uniqeIds.has(id))
         return [false, `Invalid node found. Duplicate Id. Id: ${id}; Text: ${text}`];
       else {
-        uniqeIds.add(id)
+        uniqeIds.add(id);
         return [true, ''];
       }
     }
 
     let setParent: Processor = (node: ITreeNode<ITreeNodeBase>) => {
       if (node.children)
-        node.children.forEach(child => child.parent = node)
+        node.children.forEach(child => child.parent = node);
     }
 
     let [success, errorMsg] = this.depthFirstTraversal(value, [emptyValidator, uniqueIdValidator], [setParent]);
@@ -68,7 +68,7 @@ export class Ng2TreeViewComponent extends TreeViewComponent<ITreeNodeBase> {
     if (success)
       this._nodes = value;
     else
-      console.error(errorMsg)
+      console.error(errorMsg);
   }
 
   /**
@@ -79,7 +79,7 @@ export class Ng2TreeViewComponent extends TreeViewComponent<ITreeNodeBase> {
     let stack = [...nodes];
 
     while (stack.length) {
-      let node = stack.pop() as TreeNode; //condition in while loop guarantees that it can't be undefined 
+      let node = stack.pop() as TextTreeNode; //condition in while loop guarantees that it can't be undefined 
 
       for (let validator of validators) {
         let [success, errorMsg] = validator(node);
@@ -90,7 +90,7 @@ export class Ng2TreeViewComponent extends TreeViewComponent<ITreeNodeBase> {
       processors.forEach(p => p(node));
 
       if (node.children)
-        stack.push(...node.children)
+        stack.push(...node.children);
     }
 
     return [true, ''];
@@ -102,17 +102,17 @@ export class Ng2TreeViewComponent extends TreeViewComponent<ITreeNodeBase> {
 
   @Input() set allowAdd(value: boolean) {
     this.config.allowAdd = value;
-    console.log('Ng2TreeViewComponent.allowAdd: ', value)
+    console.log('Ng2TreeViewComponent.allowAdd: ', value);
   }
 
   @Input() set allowRemove(value: boolean) {
     this.config.allowRemove = value;
-    console.log('Ng2TreeViewComponent.allowRemove: ', value)
+    console.log('Ng2TreeViewComponent.allowRemove: ', value);
   }
 
   @Input() set escalation(value: boolean) {
     this.config.escalation = value;
-    console.log('Ng2TreeViewComponent.escalation: ', value)
+    console.log('Ng2TreeViewComponent.escalation: ', value);
   }
 
   @Input() set mode(value: TreeViewMode) {
@@ -121,45 +121,45 @@ export class Ng2TreeViewComponent extends TreeViewComponent<ITreeNodeBase> {
       console.error(`Unknown treeview mode: ${value}. Please try to use one of existing modes: ${supportedModes.join(' | ')}`);
 
     this.config.mode = value;
-    console.log('Ng2TreeViewComponent.escalation: ', value)
+    console.log('Ng2TreeViewComponent.escalation: ', value);
   }
 
   get children() {
-    console.log('Ng2TreeViewComponent.children')
+    console.log('Ng2TreeViewComponent.children');
     return this.nodes;
   }
 
   get parent() {
-    console.log('Ng2TreeViewComponent.parent')
+    console.log('Ng2TreeViewComponent.parent');
     return this;
   }
 
   removeChild(node: ITreeNode<ITreeNodeBase>) {
     console.log(`Ng2TreeViewComponent. removeChild.`);
-    if (this.state == NodeState.creating)
+    if (this.state === NodeState.creating)
       this.state = NodeState.unchanged;
-    super.removeChild(node)
+    super.removeChild(node);;
   }
 
   protected add() {
     console.log(`Ng2TreeViewComponent. add.`);
 
-    if (this.state != NodeState.creating) {
+    if (this.state !== NodeState.creating) {
       //TODO: figure default values out
-      let newNode = new TreeNode("", "")
+      let newNode = new TextTreeNode('', '');
       this.children.push(newNode);
       this.state = NodeState.creating;
     }
   }
 
-  @Output() onChecked = new EventEmitter<CheckTreeNode>()
+  @Output() onChecked = new EventEmitter<CheckTreeNode>();
   protected onCheckHandler(node: CheckTreeNode) {
-    console.log('Ng2TreeViewComponent.onCheckHandler: ', node)
+    console.log('Ng2TreeViewComponent.onCheckHandler: ', node);
     this.onChecked.emit(node);
   }
 
   protected onCreatedHandler(newNode: ITreeNode<ITreeNodeBase>) {
-    console.log('Ng2TreeViewComponent.onCreatedHandler: ', newNode)
+    console.log('Ng2TreeViewComponent.onCreatedHandler: ', newNode);
 
     this.state = NodeState.unchanged;
 
@@ -167,18 +167,18 @@ export class Ng2TreeViewComponent extends TreeViewComponent<ITreeNodeBase> {
   }
 
   protected onRemovedHandler(node: ITreeNode<ITreeNodeBase>) {
-    console.log('Ng2TreeViewComponent.onRemovedHandler: ', node)
+    console.log('Ng2TreeViewComponent.onRemovedHandler: ', node);
 
-    if (this.state == NodeState.creating)
-      this.state = NodeState.unchanged
+    if (this.state === NodeState.creating)
+      this.state = NodeState.unchanged;
 
     super.onRemovedHandler(node);
   }
 
   protected onCreatingHandler(addFunc: AddNodeCallback) {
-    console.log('Ng2TreeViewComponent.onCreatingHandler.', addFunc)
-    // make sure that we can't create two and more nodes simultaneously.          
-    if (this.state != NodeState.creating) {
+    console.log('Ng2TreeViewComponent.onCreatingHandler.', addFunc);
+    // make sure that we can't create two and more nodes simultaneously.
+    if (this.state !== NodeState.creating) {
       this.state = NodeState.creating;
       addFunc();
     }
