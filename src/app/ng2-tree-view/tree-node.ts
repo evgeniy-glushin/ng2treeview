@@ -66,11 +66,12 @@ export type TreeViewMode = 'simple' | 'check';
 export type AddNodeCallback = () => void;
 
 export function createTreeNode(mode: TreeViewMode) {
+    let newId = Date.now().toString();
     switch (mode) {
         case 'simple':
-            return new TextTreeNode('', '');
+            return new TextTreeNode(newId, '');
         case 'check':
-            return new CheckTreeNode('', '');
+            return new CheckTreeNode(newId, '');
 
         default:
             throw new Error(`Unknown mode: ${mode};`);
