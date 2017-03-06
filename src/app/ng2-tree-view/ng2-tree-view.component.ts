@@ -1,6 +1,6 @@
 import { CheckTreeNodeComponent } from './check-tree-node/check-tree-node.component';
 import { TextTreeNode, TreeViewMode, CheckTreeNode, AddNodeCallback, NodeState, ITreeNode, ITreeNodeBase } from './tree-node';
-import { TreeViewComponent } from './tree-node-component'
+import { TreeViewComponent } from './tree-node-component';
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 type Validator = (node: ITreeNodeBase) => [boolean, string];
@@ -63,10 +63,11 @@ export class Ng2TreeViewComponent extends TreeViewComponent<ITreeNodeBase> {
 
     let [success, errorMsg] = this.depthFirstTraversal(value, [emptyValidator, uniqueIdValidator], [setParent]);
 
-    console.log('after depthFirstTraversal ', value)
+    let inputClone = value.map(x => x.clone());
+    console.log('after depthFirstTraversal ', inputClone)
 
     if (success)
-      this._nodes = value;
+      this._nodes = inputClone;
     else
       console.error(errorMsg);
   }
@@ -175,12 +176,12 @@ export class Ng2TreeViewComponent extends TreeViewComponent<ITreeNodeBase> {
     super.onRemovedHandler(node);
   }
 
-  protected onCreatingHandler(addFunc: AddNodeCallback) {
-    console.log('Ng2TreeViewComponent.onCreatingHandler.', addFunc);
+  protected onCreatingHandler(add: AddNodeCallback) {
+    console.log('Ng2TreeViewComponent.onCreatingHandler.', add);
     // make sure that we can't create two and more nodes simultaneously.
     if (this.state !== NodeState.creating) {
       this.state = NodeState.creating;
-      addFunc();
+      add();
     }
   }
 }

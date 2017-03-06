@@ -29,8 +29,9 @@ export class AppComponent {
   ]
 
   createTree() {
-    let size = 300;
+    console.log('createTree')
 
+    let size = 300;
     let newNodes = [new TextTreeNode('-1', 'node-1')];
     for (let i = 0; i < size; i++) {
       let node = new TextTreeNode(Math.random().toString(), 'node' + Math.random())
@@ -46,13 +47,12 @@ export class AppComponent {
     this.nodes = newNodes;
   }
 
-  //TODO: make this strongly typed
-  private nodes =
+  private nodes: TextTreeNode[] =
   [
-    { id: '1', text: 'node1', expanded: true },
-    { id: '2', text: 'node2', children: [{ id: '3', text: 'node3' }] },
-    { id: '4', text: 'node4', expanded: false, children: [{ id: '5', text: 'node5', children: [{ id: '6', text: 'node6' }] }] }
-  ]
+    new TextTreeNode('1', 'node1'),
+    new TextTreeNode('2', 'node2', [new TextTreeNode('3', 'node3')]),
+    new TextTreeNode('4', 'node4', [new TextTreeNode('5', 'node5', [new TextTreeNode('6', 'node6')])])
+  ];
 
   nodesHistory: any[] = []
   private onNodeCreated(newNode: TextTreeNode) {
