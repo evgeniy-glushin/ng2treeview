@@ -61,9 +61,10 @@ export class Ng2TreeViewComponent extends TreeViewComponent<ITreeNodeBase> {
         node.children.forEach(child => child.parent = node);
     }
 
-    let [success, errorMsg] = this.depthFirstTraversal(value, [emptyValidator, uniqueIdValidator], [setParent]);
-
     let inputClone = value.map(x => x.clone());
+
+    let [success, errorMsg] = this.depthFirstTraversal(inputClone, [emptyValidator, uniqueIdValidator], [setParent]);
+
     console.log('after depthFirstTraversal ', inputClone)
 
     if (success)
