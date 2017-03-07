@@ -15,9 +15,9 @@ export class AppComponent {
     new CheckTreeNode('2', 'node2', [
       new CheckTreeNode('2.1', 'node21', [], true, true),
       new CheckTreeNode('2.2', 'node22', [
-        new CheckTreeNode('2.2.1', 'node221', [], false, true),
+        new CheckTreeNode('2.2.1', 'node221', [], false, false),
       ], true, true)
-    ], true, true),
+    ], true, false),
     new CheckTreeNode('3', 'node3', [], false, true),
     new CheckTreeNode('4', 'node4', [
       new CheckTreeNode('41', 'node41', [

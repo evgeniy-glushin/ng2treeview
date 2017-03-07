@@ -1,5 +1,5 @@
 import { CheckTreeNode, ITreeNode } from './../tree-node';
-import { Component, Output, EventEmitter, Input } from '@angular/core';
+import { Component, Output, EventEmitter, Input, OnInit } from '@angular/core';
 import { TreeViewComponent } from './../tree-node-component';
 
 @Component({
@@ -7,7 +7,7 @@ import { TreeViewComponent } from './../tree-node-component';
   templateUrl: './check-tree-node.component.html',
   styleUrls: ['./check-tree-node.component.css']
 })
-export class CheckTreeNodeComponent extends TreeViewComponent<CheckTreeNode> {
+export class CheckTreeNodeComponent extends TreeViewComponent<CheckTreeNode>{
 
   @Input() parentComponent: TreeViewComponent<CheckTreeNode>;
 
@@ -23,12 +23,12 @@ export class CheckTreeNodeComponent extends TreeViewComponent<CheckTreeNode> {
     return this.parentComponent;
   }
 
-
   @Output() onChecked = new EventEmitter<CheckTreeNode>();
   protected onCheckedHandler(node: CheckTreeNode) {
     console.log('CheckTreeNodeComponent.onCheckedHandler. before emit ', this.node);
 
-    this.checkNodes();
+    if (this.children.length)
+      this.node.checked = this.children.every(n => n.checked);
 
     this.onChecked.emit(node);
     console.log('CheckTreeNodeComponent.onCheckedHandler: after emit', this.node);
@@ -47,22 +47,5 @@ export class CheckTreeNodeComponent extends TreeViewComponent<CheckTreeNode> {
         n.checked = this.node.checked;
         this.broadcastChildren(n.children);
       });
-  }
-
-  /**
-   * Checks whether this node can be marked as checked or partially checked (if some children are not checked)
-   */
-  private checkNodes():void {
-    if (this.children.length) {
-      this.node.someChildrenChecked = !!this.children.find(n => n.checked || n.someChildrenChecked);
-      this.node.checked = this.children.every(n => n.checked);
-    } else {
-      this.node.someChildrenChecked = false;
-    }
-  }
-
-  onCreatedHandler() {
-    this.checkNodes();
-    super.onCreatedHandler(this.node);
   }
 }

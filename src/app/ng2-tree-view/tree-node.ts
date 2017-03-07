@@ -36,8 +36,20 @@ export class CheckTreeNode implements ITreeNode<CheckTreeNode> {
         public text: string,
         public children?: CheckTreeNode[],
         public expanded = false,
-        public checked = false,
-        public someChildrenChecked = false) {
+        public checked = false) {
+    }
+
+    /**
+    * Gets whether this node can be marked as checked or partially checked (if some children are not checked)
+    */
+    public get someChildrenChecked() {
+        if (this.children) {
+            let some = this.children.some(n => n.checked || n.someChildrenChecked);
+            console.log(`anyChildrenChecked. id: ${this.text}; checked: ${this.checked}; anyChildrenChecked: `, some);
+            return some;
+        }
+
+        return false;
     }
 
     clone(): CheckTreeNode {
