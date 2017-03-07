@@ -35,7 +35,7 @@
 
   <ul *ngIf="node.expanded && hasChildren">
     <check-tree-node *ngFor="let child of node?.children" [node]="child" [parentComponent]="this" (onCreating)="onCreatingHandler($event)"
-      (onRemoved)="onRemovedHandler($event)" (onCreated)="onNewNodeAdded()" (onClick)="onClickHandler($event)" (onChecked)="onCheckedHandler($event)"
+      (onRemoved)="onRemovedHandler($event)" (onCreated)="onCreatedHandler()" (onClick)="onClickHandler($event)" (onChecked)="onCheckedHandler($event)"
       [config]="config"></check-tree-node>
   </ul>
 </li>

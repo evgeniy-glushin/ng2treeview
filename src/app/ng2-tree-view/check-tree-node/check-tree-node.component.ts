@@ -61,8 +61,8 @@ export class CheckTreeNodeComponent extends TreeViewComponent<CheckTreeNode> {
     }
   }
 
-  onNewNodeAdded() {
+  onCreatedHandler() {
     this.checkNodes();
-    this.onCreatedHandler(this.node);
+    super.onCreatedHandler(this.node);
   }
 }
