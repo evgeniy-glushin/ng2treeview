@@ -28,12 +28,7 @@ export class CheckTreeNodeComponent extends TreeViewComponent<CheckTreeNode> {
   protected onCheckedHandler(node: CheckTreeNode) {
     console.log('CheckTreeNodeComponent.onCheckedHandler. before emit ', this.node);
 
-    //emit to parents 
-    let children = this.node.children;
-    if (children && children.length) {
-      let allChecked = children.every(n => n.checked);
-      this.node.checked = allChecked;
-    }
+    this.checkNodes();
 
     this.onChecked.emit(node);
     console.log('CheckTreeNodeComponent.onCheckedHandler: after emit', this.node);
@@ -52,5 +47,22 @@ export class CheckTreeNodeComponent extends TreeViewComponent<CheckTreeNode> {
         n.checked = this.node.checked;
         this.broadcastChildren(n.children);
       });
+  }
+
+  /**
+   * Checks whether this node can be marked as checked or partially checked (if some children are not checked)
+   */
+  private checkNodes():void {
+    if (this.children.length) {
+      this.node.someChildrenChecked = !!this.children.find(n => n.checked || n.someChildrenChecked);
+      this.node.checked = this.children.every(n => n.checked);
+    } else {
+      this.node.someChildrenChecked = false;
+    }
+  }
+
+  onCreatedHandler() {
+    this.checkNodes();
+    super.onCreatedHandler(this.node);
   }
 }

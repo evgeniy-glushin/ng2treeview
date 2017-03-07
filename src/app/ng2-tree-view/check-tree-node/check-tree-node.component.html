@@ -9,8 +9,15 @@
 
   <!--TODO: consider the another event for checkbox instead of click-->
 
-  <label>
-    <input type="checkbox" name="checkNode" (change)="check(node)" [(ngModel)]="node.checked">
+  <label class="node-label">
+    <input
+      class="checkbox"
+      [class.some-children-checked]="node.someChildrenChecked"
+      [class.all-checked]="node.checked"
+      type="checkbox"
+      name="checkNode"
+      (change)="check(node)"
+      [(ngModel)]="node.checked">
     {{node?.text}}
   </label>
 
@@ -28,7 +35,7 @@
 
   <ul *ngIf="node.expanded && hasChildren">
     <check-tree-node *ngFor="let child of node?.children" [node]="child" [parentComponent]="this" (onCreating)="onCreatingHandler($event)"
-      (onRemoved)="onRemovedHandler($event)" (onCreated)="onCreatedHandler($event)" (onClick)="onClickHandler($event)" (onChecked)="onCheckedHandler($event)"
+      (onRemoved)="onRemovedHandler($event)" (onCreated)="onCreatedHandler()" (onClick)="onClickHandler($event)" (onChecked)="onCheckedHandler($event)"
       [config]="config"></check-tree-node>
   </ul>
 </li>

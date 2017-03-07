@@ -36,7 +36,8 @@ export class CheckTreeNode implements ITreeNode<CheckTreeNode> {
         public text: string,
         public children?: CheckTreeNode[],
         public expanded = false,
-        public checked = false) {
+        public checked = false,
+        public someChildrenChecked = false) {
     }
 
     clone(): CheckTreeNode {
