@@ -69,8 +69,8 @@ export class TreeViewConfig {
     constructor(public allowAdd: boolean,
         public allowRemove: boolean,
         public escalation: boolean,
-        public mode: TreeViewMode) {
-
+        public mode: TreeViewMode,
+        public color?: string) {
     }
 }
 

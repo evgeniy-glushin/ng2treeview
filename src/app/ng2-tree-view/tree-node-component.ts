@@ -1,7 +1,7 @@
 import { Output, EventEmitter, Input } from '@angular/core'
 import { TextTreeNode, TreeViewConfig, NodeState, AddNodeCallback, ITreeNode, createTreeNode } from './tree-node';
 
-//Represents abstraction and basic implementation for tree-like components.  
+//Represents abstraction and basic implementation for tree-like components.
 export abstract class TreeViewComponent<TNode extends ITreeNode<TNode>> {
     //The dafault settings
     @Input() protected config: TreeViewConfig = new TreeViewConfig(true, true, true, 'simple');
@@ -61,7 +61,7 @@ export abstract class TreeViewComponent<TNode extends ITreeNode<TNode>> {
         if (children) {
             let stack = [...children];
             while (stack.length) {
-                let node = stack.pop() as ITreeNode<TNode>; //condition in while loop guarantees that it can't be undefined 
+                let node = stack.pop() as ITreeNode<TNode>; //condition in while loop guarantees that it can't be undefined
                 node.expanded = this.node.expanded;
 
                 if (node.children)
@@ -95,7 +95,7 @@ export abstract class TreeViewComponent<TNode extends ITreeNode<TNode>> {
     }
 
 
-    protected get folderUrl() {
+    protected get iconUrl() {
         let postfix = '';
 
         if (this.hasChildren && this.node.expanded) {

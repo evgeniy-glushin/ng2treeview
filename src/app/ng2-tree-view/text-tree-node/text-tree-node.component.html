@@ -1,6 +1,11 @@
 <li class="list-item">
   <span class="folder" (click)="toggle()">
-    <img class="icon" [src]="folderUrl" alt="folder">
+    <span
+      class="icon"
+      aria-label="folder"
+      [style.fill]="config.color"
+      [inlineSVG]="iconUrl">
+    </span>
 
     <span *ngIf="!isCreating" (click)="click(node)">{{node?.text}}</span>
   </span>
