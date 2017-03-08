@@ -9,15 +9,14 @@
 
   <!--TODO: consider the another event for checkbox instead of click-->
 
-  <label class="node-label">
+  <label class="node-label" [style.fill]="config.color">
     <input
       class="checkbox"
-      [class.some-children-checked]="node.someChildrenChecked"
-      [class.all-checked]="node.checked"
       type="checkbox"
       name="checkNode"
       (change)="check(node)"
       [(ngModel)]="node.checked">
+    <span [inlineSVG]="iconUrl"></span>
     {{node?.text}}
   </label>
 

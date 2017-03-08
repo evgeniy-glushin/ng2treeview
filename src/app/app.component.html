@@ -1,7 +1,7 @@
 <button (click)="createTree()">create tree</button>
 
 <ng2treeview [nodes]="checkNodes" (onCreated)="onNodeCreated($event)" (onRemoved)="onNodeRemoved($event)" (onClick)="onNodeClicked($event)"
-  [allowAdd]="adding.checked" [allowRemove]="removing.checked" [escalation]="escalation.checked" mode="check" (onChecked)="onNodeChecked($event)"></ng2treeview>
+  [allowAdd]="adding.checked" [allowRemove]="removing.checked" [escalation]="escalation.checked" mode="check" (onChecked)="onNodeChecked($event)" color="DarkSlateBlue"></ng2treeview>
 
 
 <br/>
@@ -12,7 +12,7 @@
 
 
 <ng2treeview [nodes]="nodes" (onCreated)="onNodeCreated($event)" (onRemoved)="onNodeRemoved($event)" (onClick)="onNodeClicked($event)"
-  [allowAdd]="adding.checked" [allowRemove]="removing.checked" [escalation]="escalation.checked" mode="simple"></ng2treeview>
+  [allowAdd]="adding.checked" [allowRemove]="removing.checked" [escalation]="escalation.checked" mode="simple" color="MediumSeaGreen"></ng2treeview>
 
 <br/>
 <br/>

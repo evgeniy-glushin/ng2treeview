@@ -81,7 +81,7 @@ export class Ng2TreeViewComponent extends TreeViewComponent<ITreeNodeBase> {
     let stack = [...nodes];
 
     while (stack.length) {
-      let node = stack.pop() as TextTreeNode; //condition in while loop guarantees that it can't be undefined 
+      let node = stack.pop() as TextTreeNode; //condition in while loop guarantees that it can't be undefined
 
       for (let validator of validators) {
         let [success, errorMsg] = validator(node);
@@ -124,6 +124,10 @@ export class Ng2TreeViewComponent extends TreeViewComponent<ITreeNodeBase> {
 
     this.config.mode = value;
     console.log('Ng2TreeViewComponent.escalation: ', value);
+  }
+
+  @Input() set color(value: string) {
+    this.config.color = value;
   }
 
   get children() {
