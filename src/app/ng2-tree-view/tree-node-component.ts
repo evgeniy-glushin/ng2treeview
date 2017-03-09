@@ -19,7 +19,7 @@ export abstract class TreeViewComponent<TNode extends ITreeNode<TNode>> {
 
     private _node: TNode;
     @Input() protected set node(value: TNode) {
-        if (!value.id && !value.text)
+        if (!value.text)
             this.state = NodeState.creating;
 
         this._node = value;
@@ -84,11 +84,12 @@ export abstract class TreeViewComponent<TNode extends ITreeNode<TNode>> {
         });
     }
 
-    private readonly ENTER_KEY_CODE = 13;
-    private save(node: ITreeNode<TNode>, text: string, keyCode = this.ENTER_KEY_CODE) {
+    protected readonly ENTER_KEY_CODE = 13;
+    protected save(node: ITreeNode<TNode>, text: string, keyCode = this.ENTER_KEY_CODE) {
         if (text && keyCode === this.ENTER_KEY_CODE) {
             node.text = text;
             this.state = NodeState.added;
+            console.log(`save.`, node);
             this.onCreated.emit(node);
         }
         console.log(`save. text: ${text}; code: ${keyCode};`);

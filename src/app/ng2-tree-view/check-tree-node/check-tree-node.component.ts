@@ -1,4 +1,4 @@
-import {CheckTreeNode, ITreeNode, TreeViewConfig} from './../tree-node';
+import { CheckTreeNode, ITreeNode, TreeViewConfig, NodeState } from './../tree-node';
 import { Component, Output, EventEmitter, Input, OnInit } from '@angular/core';
 import { TreeViewComponent } from './../tree-node-component';
 
@@ -22,6 +22,13 @@ export class CheckTreeNodeComponent extends TreeViewComponent<CheckTreeNode>{
   get parent() {
     console.log('TreeNodeComponent.parent: ', this.parentComponent);
     return this.parentComponent;
+  }
+
+  protected save(node: CheckTreeNode, text: string, keyCode = this.ENTER_KEY_CODE) {
+    if (text && keyCode === this.ENTER_KEY_CODE) {
+      super.save(node, text, keyCode);
+      node.checked = true;
+    }
   }
 
   @Output() onChecked = new EventEmitter<CheckTreeNode>();

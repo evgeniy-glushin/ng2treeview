@@ -185,6 +185,7 @@ export class Ng2TreeViewComponent extends TreeViewComponent<ITreeNodeBase> {
     console.log('Ng2TreeViewComponent.onCreatingHandler.', add);
     // make sure that we can't create two and more nodes simultaneously.
     if (this.state !== NodeState.creating) {
+       console.log('Ng2TreeViewComponent.onCreatingHandler. creating');
       this.state = NodeState.creating;
       add();
     }
