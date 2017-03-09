@@ -47,22 +47,22 @@ export abstract class TreeViewComponent<TNode extends ITreeNode<TNode>> {
         this.parent.removeChild(node);
     }
 
-    // abstract toggle(escalation: boolean, value?: boolean): void;
-    protected toggle(escalation: boolean = false, value?: boolean) {
-        this.node.expanded = value !== undefined ?
-            value : !this.node.expanded;
+    protected toggle(node: ITreeNode<TNode>, escalation = false, value?: boolean) {
+        //TODO: make sure that value? param is realy needed
+        node.expanded = value !== undefined ?
+            value : !node.expanded;
 
         if (escalation) {
-            this.escalateToggle(this.node.children);
+            this.escalateToggle(node, node.children);
         }
     }
 
-    private escalateToggle(children?: ITreeNode<TNode>[]) {
+    private escalateToggle(node: ITreeNode<TNode>, children?: ITreeNode<TNode>[]) {
         if (children) {
             let stack = [...children];
             while (stack.length) {
                 let node = stack.pop() as ITreeNode<TNode>; //condition in while loop guarantees that it can't be undefined
-                node.expanded = this.node.expanded;
+                node.expanded = node.expanded;
 
                 if (node.children)
                     stack.push(...node.children);
@@ -80,7 +80,7 @@ export abstract class TreeViewComponent<TNode extends ITreeNode<TNode>> {
             let newNode = createTreeNode(this.config.mode);
             this.children.push(newNode);
 
-            this.toggle(false, true);
+            this.toggle(newNode, false, true);
         });
     }
 

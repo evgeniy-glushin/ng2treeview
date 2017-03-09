@@ -1,5 +1,5 @@
 <li>
-  <a href="#" (click)="toggle()">
+  <a href="#" (click)="toggle(node)">
     <span *ngIf="node.expanded && hasChildren">-</span>
     <span *ngIf="!node.expanded && hasChildren">+</span>
     <!--It just makes indent for the items without children nodes. TODO: figure something else out.-->
@@ -28,7 +28,7 @@
 
   <button class="btn" *ngIf="config.allowRemove || isCreating" (click)="remove(node)">remove</button>
 
-  <button class="btn" *ngIf="node.children?.length && config.escalation && !isCreating" (click)="toggle(config.escalation)">
+  <button class="btn" *ngIf="node.children?.length && config.escalation && !isCreating" (click)="toggle(node, config.escalation)">
     {{node.expanded ? 'collapse' : 'expand'}} all
   </button>
 

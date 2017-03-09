@@ -11,8 +11,9 @@ type Processor = (node: ITreeNodeBase) => void;
   styleUrls: ['./ng2-tree-view.component.css'],
   template: `
     <ul [ngSwitch]="config.mode">
-      <li class="list-item" *ngIf="config.allowAdd">
-        <button class="btn" (click)="add()">add</button>
+      <li class="list-item" *ngIf="config.allowAdd || config.escalation">
+        <button class="btn" *ngIf="config.allowAdd" (click)="add()">add</button>
+        <button class="btn" *ngIf="config.escalation" (click)="toggleAll(true)">expand/collapse all</button>
       </li>
       <div *ngSwitchCase="'simple'">
         <text-tree-node *ngFor="let child of nodes" [node]="child" [parentComponent]="this"
@@ -102,6 +103,11 @@ export class Ng2TreeViewComponent extends TreeViewComponent<ITreeNodeBase> {
     return this._nodes;
   }
 
+  protected toggleAll() {
+    console.log('Ng2TreeViewComponent.toggleAll ', this.nodes);
+    this.nodes.forEach(n => super.toggle(n, true));
+  }
+
   @Input() set allowAdd(value: boolean) {
     this.config.allowAdd = value;
     console.log('Ng2TreeViewComponent.allowAdd: ', value);
@@ -184,7 +190,7 @@ export class Ng2TreeViewComponent extends TreeViewComponent<ITreeNodeBase> {
     console.log('Ng2TreeViewComponent.onCreatingHandler.', add);
     // make sure that we can't create two and more nodes simultaneously.
     if (this.state !== NodeState.creating) {
-       console.log('Ng2TreeViewComponent.onCreatingHandler. creating');
+      console.log('Ng2TreeViewComponent.onCreatingHandler. creating');
       this.state = NodeState.creating;
       add();
     }

@@ -1,5 +1,5 @@
 <li class="list-item">
-  <span class="folder" (click)="toggle()">
+  <span class="folder" (click)="toggle(node)">
     <span
       class="icon"
       aria-label="folder"
@@ -14,7 +14,7 @@
 
   <button class="btn" *ngIf="config.allowRemove || isCreating" (click)="remove(node)">remove</button>
 
-  <button class="btn" *ngIf="hasChildren && config.escalation && !isCreating" (click)="toggle(config.escalation)">
+  <button class="btn" *ngIf="hasChildren && config.escalation && !isCreating" (click)="toggle(node, config.escalation)">
     {{node.expanded ? 'collapse' : 'expand'}} all
   </button>
 
