@@ -38,7 +38,11 @@ type Processor = (node: ITreeNodeBase) => void;
 export class Ng2TreeViewComponent extends TreeViewComponent<ITreeNodeBase> {
   private _nodes: ITreeNode<ITreeNodeBase>[];
   @Input() set nodes(value: ITreeNode<ITreeNodeBase>[]) {
-    console.log('Ng2TreeViewComponent.setNodes: ', value)
+    console.log('Ng2TreeViewComponent.setNodes: ', value);
+
+    this.expanded = value.every(n => n.expanded || !n.children || !n.children.length);
+
+    console.log('Ng2TreeViewComponent.setNodes. expanded: ', this.expanded);
 
     let emptyValidator: Validator = ({id, text}: ITreeNodeBase) => {
       if (id && text)
@@ -103,9 +107,13 @@ export class Ng2TreeViewComponent extends TreeViewComponent<ITreeNodeBase> {
     return this._nodes;
   }
 
+  private expanded = false;
   protected toggleAll() {
-    console.log('Ng2TreeViewComponent.toggleAll ', this.nodes);
-    this.nodes.forEach(n => super.toggle(n, true));
+    this.expanded = !this.expanded;
+
+    this.nodes.forEach(n => {
+      super.toggle(n, true, this.expanded);
+    });
   }
 
   @Input() set allowAdd(value: boolean) {

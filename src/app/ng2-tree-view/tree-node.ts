@@ -45,7 +45,7 @@ export class CheckTreeNode implements ITreeNode<CheckTreeNode> {
     public get someChildrenChecked() {
         if (this.children) {
             let some = this.children.some(n => n.checked || n.someChildrenChecked);
-            console.log(`anyChildrenChecked. id: ${this.text}; checked: ${this.checked}; anyChildrenChecked: `, some);
+            // console.log(`anyChildrenChecked. id: ${this.text}; checked: ${this.checked}; anyChildrenChecked: `, some);
             return some;
         }
 
