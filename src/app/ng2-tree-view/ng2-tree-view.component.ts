@@ -1,5 +1,5 @@
 import { CheckTreeNodeComponent } from './check-tree-node/check-tree-node.component';
-import { TextTreeNode, TreeViewMode, CheckTreeNode, AddNodeCallback, NodeState, ITreeNode, ITreeNodeBase } from './tree-node';
+import { TextTreeNode, TreeViewMode, CheckTreeNode, AddNodeCallback, NodeState, ITreeNode, ITreeNodeBase, createTreeNode } from './tree-node';
 import { TreeViewComponent } from './tree-node-component';
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 
@@ -144,15 +144,14 @@ export class Ng2TreeViewComponent extends TreeViewComponent<ITreeNodeBase> {
     console.log(`Ng2TreeViewComponent. removeChild.`);
     if (this.state === NodeState.creating)
       this.state = NodeState.unchanged;
-    super.removeChild(node);;
+    super.removeChild(node);
   }
 
   protected add() {
     console.log(`Ng2TreeViewComponent. add.`);
 
     if (this.state !== NodeState.creating) {
-      //TODO: figure default values out
-      let newNode = new TextTreeNode('', '');
+      let newNode = createTreeNode(this.config.mode);
       this.children.push(newNode);
       this.state = NodeState.creating;
     }
