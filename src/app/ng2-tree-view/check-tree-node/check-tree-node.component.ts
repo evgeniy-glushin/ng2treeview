@@ -28,6 +28,7 @@ export class CheckTreeNodeComponent extends TreeViewComponent<CheckTreeNode>{
     if (text && keyCode === this.ENTER_KEY_CODE) {
       super.save(node, text, keyCode);
       node.checked = true;
+      this.check(node);
     }
   }
 
