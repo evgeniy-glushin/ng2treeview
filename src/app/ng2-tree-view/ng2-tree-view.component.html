@@ -1,0 +1,16 @@
+<ul [ngSwitch]="config.mode">
+    <li class="list-item" *ngIf="config.allowAdd || config.escalation">
+        <button class="btn" *ngIf="config.allowAdd" (click)="add()">add</button>
+        <button class="btn" *ngIf="config.escalation" (click)="toggleAll(true)">expand/collapse all</button>
+    </li>
+    <div *ngSwitchCase="'simple'">
+        <text-tree-node *ngFor="let child of nodes" [node]="child" [parentComponent]="this" (onCreated)="onCreatedHandler($event)"
+            (onCreating)="onCreatingHandler($event)" (onRemoved)="onRemovedHandler($event)" (onClick)="onClickHandler($event)"
+            [config]="config"></text-tree-node>
+    </div>
+    <div *ngSwitchCase="'check'">
+        <check-tree-node *ngFor="let child of nodes" [node]="child" [parentComponent]="this" (onCreated)="onCreatedHandler($event)"
+            (onCreating)="onCreatingHandler($event)" (onRemoved)="onRemovedHandler($event)" (onClick)="onClickHandler($event)"
+            (onChecked)="onCheckHandler($event)" [config]="config"></check-tree-node>
+    </div>
+</ul>

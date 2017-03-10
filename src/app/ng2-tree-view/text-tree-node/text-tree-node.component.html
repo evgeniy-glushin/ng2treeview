@@ -7,7 +7,7 @@
       [inlineSVG]="iconUrl">
     </span>
 
-    <span *ngIf="!isCreating" (click)="click(node)">{{node?.text}}</span>
+    <span *ngIf="!isCreating" (click)="onClickHandler(node)">{{node?.text}}</span>
   </span>
 
   <button class="btn" *ngIf="config.allowAdd && !isCreating" (click)="add()">add</button>

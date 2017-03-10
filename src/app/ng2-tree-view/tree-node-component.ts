@@ -2,21 +2,11 @@ import { Output, EventEmitter, Input } from '@angular/core'
 import { TextTreeNode, TreeViewConfig, NodeState, AddNodeCallback, ITreeNode, createTreeNode } from './tree-node';
 
 //Represents abstraction and basic implementation for tree-like components.
-export abstract class TreeViewComponent<TNode extends ITreeNode<TNode>> {
+export abstract class TreeNodeComponent<TNode extends ITreeNode<TNode>> {
     //The dafault settings
     @Input() protected config: TreeViewConfig = new TreeViewConfig(true, true, true, 'simple');
 
     protected state: NodeState;
-
-    protected get hasChildren() {
-        const children = this.node.children;
-        return (children !== undefined && children.length > 0);
-    }
-
-    protected get isCreating() {
-        return this.state === NodeState.creating;
-    }
-
     private _node: TNode;
     @Input() protected set node(value: TNode) {
         if (!value.text)
@@ -25,13 +15,8 @@ export abstract class TreeViewComponent<TNode extends ITreeNode<TNode>> {
         this._node = value;
     }
 
-    protected get node() {
-        return this._node;
-    }
-
-    //If it looks wierd or unfamiliar for you look into Template Method design pattern.
     abstract get children(): ITreeNode<TNode>[]
-    removeChild(node: TNode) {
+    protected removeChild(node: TNode) {
         if (this.children) {
             let idx = this.children.indexOf(node);
             console.log('TreeViewComponent.removeChild. target index: ', idx);
@@ -40,8 +25,7 @@ export abstract class TreeViewComponent<TNode extends ITreeNode<TNode>> {
         }
     }
 
-    //If it looks wierd or unfamiliar for you look into Template Method design pattern.
-    abstract get parent(): TreeViewComponent<TNode>
+    abstract get parent(): TreeNodeComponent<TNode>
     protected remove(node: TNode) {
         console.log('TreeViewComponent.remove: ', node);
         this.parent.removeChild(node);
@@ -54,23 +38,22 @@ export abstract class TreeViewComponent<TNode extends ITreeNode<TNode>> {
 
         console.log('TreeViewComponent.toggle: ', node);
         if (escalation) {
-            this.escalateToggle(node, node.children);
+            escalateToggle(node, node.children);
         }
-    }
 
-    private escalateToggle(parentNode: ITreeNode<TNode>, children?: ITreeNode<TNode>[]) {
-        if (children) {
-            let stack = [...children];
-            while (stack.length) {
-                let node = stack.pop() as ITreeNode<TNode>; //condition in while loop guarantees that it can't be undefined
-                node.expanded = parentNode.expanded;
+        function escalateToggle(parentNode: ITreeNode<TNode>, children?: ITreeNode<TNode>[]) {
+            if (children) {
+                let stack = [...children];
+                while (stack.length) {
+                    let node = stack.pop() as ITreeNode<TNode>; //condition in while loop guarantees that it can't be undefined
+                    node.expanded = parentNode.expanded;
 
-                if (node.children)
-                    stack.push(...node.children);
+                    if (node.children)
+                        stack.push(...node.children);
+                }
             }
         }
     }
-
 
     protected add() {
         console.log(`TreeViewComponent. add was called.`);
@@ -81,7 +64,7 @@ export abstract class TreeViewComponent<TNode extends ITreeNode<TNode>> {
             let newNode = createTreeNode(this.config.mode);
             this.children.push(newNode);
 
-            this.toggle(newNode, false, true);
+            this.toggle(this.node, false, true);
         });
     }
 
@@ -96,6 +79,18 @@ export abstract class TreeViewComponent<TNode extends ITreeNode<TNode>> {
         console.log(`save. text: ${text}; code: ${keyCode};`);
     }
 
+    protected get hasChildren() {
+        const children = this.node.children;
+        return (children !== undefined && children.length > 0);
+    }
+
+    protected get isCreating() {
+        return this.state === NodeState.creating;
+    }
+
+    protected get node() {
+        return this._node;
+    }
 
     protected get iconUrl() {
         let postfix = '';
@@ -107,10 +102,6 @@ export abstract class TreeViewComponent<TNode extends ITreeNode<TNode>> {
         }
 
         return `../../assets/icons/folder${postfix}.svg`;
-    }
-
-    protected click(node: ITreeNode<TNode>) {
-        this.onClick.emit(node);
     }
 
     @Output() onClick = new EventEmitter<ITreeNode<TNode>>();

@@ -1,5 +1,5 @@
 import {TextTreeNode, NodeState, TreeViewConfig} from './../tree-node';
-import { TreeViewComponent } from './../tree-node-component';
+import { TreeNodeComponent } from './../tree-node-component';
 import { Component, OnInit, Input, SkipSelf, Host, Optional, Output, EventEmitter } from '@angular/core';
 // TODO: remove unused imports
 
@@ -8,9 +8,8 @@ import { Component, OnInit, Input, SkipSelf, Host, Optional, Output, EventEmitte
   templateUrl: './text-tree-node.component.html',
   styleUrls: ['./text-tree-node.component.css']
 })
-export class TextTreeNodeComponent extends TreeViewComponent<TextTreeNode> {
-  @Input() parentComponent: TreeViewComponent<TextTreeNode>;
-  @Input() config: TreeViewConfig;
+export class TextTreeNodeComponent extends TreeNodeComponent<TextTreeNode> {
+  @Input() parentComponent: TreeNodeComponent<TextTreeNode>;
 
   get children() {
     if (!this.node.children)
