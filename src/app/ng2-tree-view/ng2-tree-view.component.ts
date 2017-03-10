@@ -168,6 +168,12 @@ export class Ng2TreeViewComponent extends TreeNodeComponent<ITreeNodeBase> {
     }
   }
 
+  private selectedComponent: TreeNodeComponent<ITreeNodeBase>;
+  protected onClickHandler(component: TreeNodeComponent<ITreeNodeBase>) {
+    console.log('Ng2TreeViewComponent.onClickHandler: ', component);
+
+    super.onClickHandler(component);
+  }
 
   get nodes() {
     return this._nodes;

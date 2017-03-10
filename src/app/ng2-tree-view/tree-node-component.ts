@@ -1,5 +1,5 @@
 import { Output, EventEmitter, Input } from '@angular/core'
-import { TextTreeNode, TreeViewConfig, NodeState, AddNodeCallback, ITreeNode, createTreeNode } from './tree-node';
+import { TextTreeNode, TreeViewConfig, NodeState, AddNodeCallback, ITreeNode, createTreeNode, ITreeNodeBase } from './tree-node';
 
 //Represents abstraction and basic implementation for tree-like components.
 export abstract class TreeNodeComponent<TNode extends ITreeNode<TNode>> {
@@ -104,10 +104,10 @@ export abstract class TreeNodeComponent<TNode extends ITreeNode<TNode>> {
         return `../../assets/icons/folder${postfix}.svg`;
     }
 
-    @Output() onClick = new EventEmitter<ITreeNode<TNode>>();
-    protected onClickHandler(node: ITreeNode<TNode>) {
-        console.log('TreeViewComponent.onClickHandler: ', node);
-        this.onClick.emit(node);
+    @Output() onClick = new EventEmitter<TreeNodeComponent<ITreeNodeBase>>();
+    protected onClickHandler(component: TreeNodeComponent<ITreeNodeBase>) {
+        console.log('TreeViewComponent.onClickHandler: ', component);
+        this.onClick.emit(this);
     }
 
     @Output() onCreated = new EventEmitter<ITreeNode<TNode>>();
