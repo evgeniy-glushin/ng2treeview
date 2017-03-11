@@ -1,4 +1,4 @@
-<li>
+<li class="list-item">
   <a href="#" (click)="toggle(node)">
     <span *ngIf="node.expanded && hasChildren">-</span>
     <span *ngIf="!node.expanded && hasChildren">+</span>
@@ -23,18 +23,36 @@
   <!--TODO: onblur event conflicts with cancel button click event (blur)="save(nodeText.value, 13, $event.relatedTarget.id)"-->
   <input #nodeText type="text" *ngIf="isCreating" (keydown)="save(node, nodeText.value, $event.keyCode)" />
 
-  <!--TODO: replace this shity "add" word with some icon-->
-  <button class="btn" *ngIf="config.allowAdd && !isCreating" (click)="add()">add</button>
+  <span
+    class="tooltip-right"
+    *ngIf="config.allowAdd && !isCreating"
+    [style.fill]="config.color"
+    (click)="add()"
+    [inlineSVG]="'../../assets/icons/add.svg'"
+    data-tooltip="Add child item">
+  </span>
 
-  <button class="btn" *ngIf="config.allowRemove || isCreating" (click)="remove(node)">remove</button>
+  <span
+    class="tooltip-right"
+    *ngIf="config.allowRemove || isCreating"
+    [style.fill]="config.color"
+    (click)="remove(node)"
+    [inlineSVG]="'../../assets/icons/remove.svg'"
+    data-tooltip="Remove item">
+  </span>
 
-  <button class="btn" *ngIf="node.children?.length && config.escalation && !isCreating" (click)="toggle(node, config.escalation)">
-    {{node.expanded ? 'collapse' : 'expand'}} all
-  </button>
+  <span
+    class="tooltip-right"
+    *ngIf="node.children?.length && config.escalation && !isCreating"
+    [style.fill]="config.color"
+    (click)="toggle(node, config.escalation)"
+    [inlineSVG]="'../../assets/icons/' + (node.expanded ? 'collapse' : 'expand') + '.svg'"
+    [attr.data-tooltip]="node.expanded ? 'Collapse' : 'Expand'">
+  </span>
 
   <ul *ngIf="node.expanded && hasChildren">
     <check-tree-node *ngFor="let child of node?.children" [node]="child" [parentComponent]="this" (onCreating)="onCreatingHandler($event)"
-      (onRemoved)="onRemovedHandler($event)" (onCreated)="onCreatedHandler($event)" (onClick)="onClickHandler($event)" (onChecked)="onCheckedHandler($event)"
-      [config]="config"></check-tree-node>
+                     (onRemoved)="onRemovedHandler($event)" (onCreated)="onCreatedHandler($event)" (onClick)="onClickHandler($event)" (onChecked)="onCheckedHandler($event)"
+                     [config]="config"></check-tree-node>
   </ul>
 </li>
