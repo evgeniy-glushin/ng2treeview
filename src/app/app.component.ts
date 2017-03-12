@@ -75,4 +75,9 @@ export class AppComponent {
     console.log('AppComponent.onNodeChecked: ', node)
     this.nodesHistory.push({ name: node.text, event: 'checked' })
   }
+
+  private onNodeSelected(node: TextTreeNode) {
+    console.log('AppComponent.onNodeSelected: ', node);
+    this.nodesHistory.push({ name: node.text, event: 'selected' })
+  }
 }

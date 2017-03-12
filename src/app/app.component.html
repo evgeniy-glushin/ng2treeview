@@ -12,7 +12,8 @@
 
 
 <ng2treeview [nodes]="nodes" (onCreated)="onNodeCreated($event)" (onRemoved)="onNodeRemoved($event)" (onClick)="onNodeClicked($event)"
-  [allowAdd]="adding.checked" [allowRemove]="removing.checked" [escalation]="escalation.checked" mode="simple" color="MediumSeaGreen"></ng2treeview>
+  [allowAdd]="adding.checked" [allowRemove]="removing.checked" [escalation]="escalation.checked" mode="simple" color="MediumSeaGreen"
+  (onSelected)="onNodeSelected($event)"></ng2treeview>
 
 <br/>
 <br/>

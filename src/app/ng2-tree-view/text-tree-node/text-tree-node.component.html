@@ -4,11 +4,16 @@
       <span
         class="icon"
         aria-label="folder"
-        [style.fill]="config.color"
+        [style.fill]="config.color"        
         [inlineSVG]="iconUrl">
       </span>
 
-      <span *ngIf="!isCreating" (click)="onClickHandler(node)">{{node?.text}}</span>
+      <span 
+        *ngIf="!isCreating" 
+        (click)="click()"
+        [ngClass]="selected ? 'selected-node' : ''">
+        {{node?.text}}
+      </span>
     </span>
 
     <span

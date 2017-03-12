@@ -168,11 +168,24 @@ export class Ng2TreeViewComponent extends TreeNodeComponent<ITreeNodeBase> {
     }
   }
 
-  private selectedComponent: TreeNodeComponent<ITreeNodeBase>;
+  @Output() onSelected = new EventEmitter<ITreeNode<ITreeNodeBase>>();
+  private selectedComponent: TreeNodeComponent<ITreeNodeBase> | undefined;
   protected onClickHandler(component: TreeNodeComponent<ITreeNodeBase>) {
     console.log('Ng2TreeViewComponent.onClickHandler: ', component);
 
-    super.onClickHandler(component);
+    if (!this.selectedComponent) {
+      component.selected = true;
+      this.selectedComponent = component;
+    } else if (this.selectedComponent === component) {
+      component.selected = false;
+      this.selectedComponent = undefined;
+    } else {
+      this.selectedComponent.selected = false;
+      component.selected = true;
+      this.selectedComponent = component;
+    }
+
+    this.onSelected.emit(component.node);
   }
 
   get nodes() {

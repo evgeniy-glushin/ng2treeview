@@ -8,7 +8,7 @@ export abstract class TreeNodeComponent<TNode extends ITreeNode<TNode>> {
 
     protected state: NodeState;
     private _node: TNode;
-    @Input() protected set node(value: TNode) {
+    @Input() set node(value: TNode) {
         if (!value.text)
             this.state = NodeState.creating;
 
@@ -79,6 +79,10 @@ export abstract class TreeNodeComponent<TNode extends ITreeNode<TNode>> {
         console.log(`save. text: ${text}; code: ${keyCode};`);
     }
 
+    protected click() {
+        this.onClick.emit(this);
+    }
+
     protected get hasChildren() {
         const children = this.node.children;
         return (children !== undefined && children.length > 0);
@@ -88,9 +92,11 @@ export abstract class TreeNodeComponent<TNode extends ITreeNode<TNode>> {
         return this.state === NodeState.creating;
     }
 
-    protected get node() {
+    get node() {
         return this._node;
     }
+
+    selected = false;
 
     protected get iconUrl() {
         let postfix = '';
@@ -104,10 +110,10 @@ export abstract class TreeNodeComponent<TNode extends ITreeNode<TNode>> {
         return `../../assets/icons/folder${postfix}.svg`;
     }
 
-    @Output() onClick = new EventEmitter<TreeNodeComponent<ITreeNodeBase>>();
+    @Output() protected onClick = new EventEmitter<TreeNodeComponent<ITreeNodeBase>>();
     protected onClickHandler(component: TreeNodeComponent<ITreeNodeBase>) {
         console.log('TreeViewComponent.onClickHandler: ', component);
-        this.onClick.emit(this);
+        this.onClick.emit(component);
     }
 
     @Output() onCreated = new EventEmitter<ITreeNode<TNode>>();
