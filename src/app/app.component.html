@@ -1,26 +1,24 @@
 <button (click)="createTree()">create tree</button>
 
-<ng2treeview [nodes]="checkNodes" (onCreated)="onNodeCreated($event)" (onRemoved)="onNodeRemoved($event)" (onClick)="onNodeClicked($event)"
-  [allowAdd]="adding.checked" [allowRemove]="removing.checked" [escalation]="escalation.checked" mode="check" (onChecked)="onNodeChecked($event)" color="DarkSlateBlue"></ng2treeview>
-
-
-<br/>
-<br/>
+<ng2treeview #checkTreeView [nodes]="checkNodes" (onCreated)="onNodeCreated($event)" (onRemoved)="onNodeRemoved($event)"
+  (onClick)="onNodeClicked($event)" [allowAdd]="adding.checked" [allowRemove]="removing.checked" [escalation]="escalation.checked"
+  mode="check" (onChecked)="onNodeChecked($event)" color="DarkSlateBlue"></ng2treeview>
 
 <br/>
 <br/>
 
+<br/>
+<br/>
 
-<ng2treeview [nodes]="nodes" (onCreated)="onNodeCreated($event)" (onRemoved)="onNodeRemoved($event)" (onClick)="onNodeClicked($event)"
-  [allowAdd]="adding.checked" [allowRemove]="removing.checked" [escalation]="escalation.checked" mode="simple" color="MediumSeaGreen"
-  (onSelected)="onNodeSelected($event)"></ng2treeview>
+<ng2treeview #textTreeView [nodes]="nodes" [allowAdd]="adding.checked" [allowRemove]="removing.checked" [escalation]="escalation.checked"
+  mode="simple" color="MediumSeaGreen"></ng2treeview>
 
 <br/>
 <br/>
 
 <div>
   <h3>Tracking:</h3>
-  <div *ngFor="let node of nodesHistory">
+  <div *ngFor="let node of nodesTracking">
     {{node.name}}: {{node.event}}
   </div>
 </div>

@@ -1,13 +1,40 @@
-import { TextTreeNode, CheckTreeNode, NodeState } from './ng2-tree-view/tree-node';
-import { Component } from '@angular/core';
-import { Ng2TreeViewComponent } from './ng2-tree-view/ng2-tree-view.component'
+import { TextTreeNode, CheckTreeNode, NodeState, ITreeNodeBase } from './ng2-tree-view/tree-node';
+import { Component, ViewChildren, ViewChild, OnInit } from '@angular/core';
+import { Ng2TreeViewComponent } from './ng2-tree-view/ng2-tree-view.component';
+import * as Rx from 'rxjs';
+import 'rxjs/add/operator/merge';
+import 'rxjs/add/operator/map';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html'
 })
-export class AppComponent {
-  title = 'app works!';
+export class AppComponent implements OnInit {
+  @ViewChild('textTreeView') textTreeView: Ng2TreeViewComponent;
+  @ViewChild('checkTreeView') checkTreeView: Ng2TreeViewComponent;
+
+  private nodesTracking: Array<{ name: string; event: string }> = [];
+
+  ngOnInit(): void {
+    let tv = this.textTreeView;
+
+    let onCreated$ = this.textTreeView
+      .onCreated
+      .map(x => ({ name: x.text, event: 'created' }));
+
+    let onSelected$ = this.textTreeView
+      .onSelected
+      .map(x => ({ name: x.text, event: 'selected' }));
+
+    let onRemoved$ = this.textTreeView
+      .onRemoved
+      .map((x: TextTreeNode) => ({ name: x.text, event: 'removed' }));
+
+    onCreated$
+      .merge(onSelected$)
+      .merge(onRemoved$)
+      .subscribe(this.nodesTracking.push.bind(this.nodesTracking));
+  }
 
   private checkNodes: CheckTreeNode[] =
   [
@@ -29,17 +56,17 @@ export class AppComponent {
   ]
 
   createTree() {
-    console.log('createTree')
+    console.log('createTree');
 
     let size = 300;
     let newNodes = [new TextTreeNode('-1', 'node-1')];
     for (let i = 0; i < size; i++) {
-      let node = new TextTreeNode(Math.random().toString(), 'node' + Math.random())
-      newNodes.push(node)
+      let node = new TextTreeNode(Math.random().toString(), 'node' + Math.random());
+      newNodes.push(node);
 
       for (let j = 0; j < size; j++) {
-        let nestedNode = new TextTreeNode(`${Math.random()}`, `node${Math.random()}`)
-        node.children = [nestedNode]
+        let nestedNode = new TextTreeNode(`${Math.random()}`, `node${Math.random()}`);
+        node.children = [nestedNode];
         node = nestedNode;
       }
     }
@@ -54,30 +81,30 @@ export class AppComponent {
     new TextTreeNode('4', 'node4', [new TextTreeNode('5', 'node5', [new TextTreeNode('6', 'node6')])])
   ];
 
-  nodesHistory: any[] = []
+
   private onNodeCreated(newNode: TextTreeNode) {
-    console.log('AppComponent.onNodeCreated: ', newNode)
-    this.nodesHistory.push({ name: newNode.text, event: 'created' })
+    console.log('AppComponent.onNodeCreated: ', newNode);
+    this.nodesTracking.push({ name: newNode.text, event: 'created' });
   }
 
   private onNodeRemoved(node: TextTreeNode) {
     // node.parent
-    console.log('AppComponent.onNodeRemoved: ', node)
-    this.nodesHistory.push({ name: node.text, event: 'removed' })
+    console.log('AppComponent.onNodeRemoved: ', node);
+    this.nodesTracking.push({ name: node.text, event: 'removed' });
   }
 
   private onNodeClicked(node: TextTreeNode) {
-    console.log('AppComponent.onNodeClicked: ', node)
-    this.nodesHistory.push({ name: node.text, event: 'clicked' })
+    console.log('AppComponent.onNodeClicked: ', node);
+    this.nodesTracking.push({ name: node.text, event: 'clicked' });
   }
 
   private onNodeChecked(node: CheckTreeNode) {
-    console.log('AppComponent.onNodeChecked: ', node)
-    this.nodesHistory.push({ name: node.text, event: 'checked' })
+    console.log('AppComponent.onNodeChecked: ', node);
+    this.nodesTracking.push({ name: node.text, event: 'checked' });
   }
 
   private onNodeSelected(node: TextTreeNode) {
     console.log('AppComponent.onNodeSelected: ', node);
-    this.nodesHistory.push({ name: node.text, event: 'selected' })
+    this.nodesTracking.push({ name: node.text, event: 'selected' });
   }
 }
