@@ -41,6 +41,9 @@ export abstract class TreeNodeComponent<TNode extends ITreeNode<TNode>> {
             escalateToggle(node, node.children);
         }
 
+        console.log('TreeViewComponent.toggle. Before ontoggle emit');
+        this.onToggle.emit();
+
         function escalateToggle(parentNode: ITreeNode<TNode>, children?: ITreeNode<TNode>[]) {
             if (children) {
                 let stack = [...children];
@@ -132,5 +135,11 @@ export abstract class TreeNodeComponent<TNode extends ITreeNode<TNode>> {
     protected onCreatingHandler(addCallback: AddNodeCallback) {
         console.log('TreeViewComponent.onCreatingHandler.');
         return this.onCreating.emit(addCallback);
+    }
+
+    @Output() protected onToggle = new EventEmitter();
+    protected onToggleHandler() {
+        console.log('TreeViewComponent.onToggleHandler.');
+        return this.onToggle.emit();
     }
 }

@@ -16,7 +16,7 @@ export class Ng2TreeViewComponent extends TreeNodeComponent<ITreeNodeBase> {
   @Input() set nodes(value: ITreeNode<ITreeNodeBase>[]) {
     console.log('Ng2TreeViewComponent.setNodes: ', value);
 
-    this.expanded = value.every(n => n.expanded || !n.children || !n.children.length);
+    this.expanded = this.isExpanded(value);
 
     console.log('Ng2TreeViewComponent.setNodes. expanded: ', this.expanded);
 
@@ -25,7 +25,7 @@ export class Ng2TreeViewComponent extends TreeNodeComponent<ITreeNodeBase> {
         return [true, ''];
       else
         return [false, `Invalid node found. Empty value. Id: ${id}; Text: ${text}`];
-    }
+    };
 
     let uniqeIds = new Set<string>();
     let uniqueIdValidator: Validator = ({ id, text }: ITreeNodeBase) => {
@@ -35,49 +35,52 @@ export class Ng2TreeViewComponent extends TreeNodeComponent<ITreeNodeBase> {
         uniqeIds.add(id);
         return [true, ''];
       }
-    }
+    };
 
     let setParent: Processor = (node: ITreeNode<ITreeNodeBase>) => {
       if (node.children)
         node.children.forEach(child => child.parent = node);
-    }
+    };
 
     let inputClone = value.map(x => x.clone());
 
-    let [success, errorMsg] = depthFirstTraversal(inputClone, [emptyValidator, uniqueIdValidator], [setParent]);
+    let [success, errorMsg] = this.depthFirstTraversal(inputClone, [emptyValidator, uniqueIdValidator], [setParent]);
 
-    console.log('after depthFirstTraversal ', inputClone)
+    console.log('after depthFirstTraversal ', inputClone);
 
     if (success)
       this._nodes = inputClone;
     else
       console.error(errorMsg);
+  }
 
-    /**
-     * Goes through the nodes and applies validators for each node.
-     * @returns the validation result.
-     */
-    function depthFirstTraversal(nodes: ITreeNode<ITreeNodeBase>[], validators: Validator[], processors: Processor[]) {
-      let stack = [...nodes];
+  /**
+  * Goes through the nodes and applies validators for each node.
+  * @returns the validation result.
+  */
+  private depthFirstTraversal(nodes: ITreeNode<ITreeNodeBase>[], validators: Validator[], processors: Processor[]): [boolean, string] {
+    let stack = [...nodes];
 
-      while (stack.length) {
-        let node = stack.pop() as TextTreeNode; //condition in while loop guarantees that it can't be undefined
+    while (stack.length) {
+      let node = stack.pop() as TextTreeNode; //condition in while loop guarantees that it can't be undefined
 
-        for (let validator of validators) {
-          let [success, errorMsg] = validator(node);
-          if (!success)
-            return [success, errorMsg]
-        }
-
-        processors.forEach(p => p(node));
-
-        if (node.children)
-          stack.push(...node.children);
+      for (let validator of validators) {
+        let [success, errorMsg] = validator(node);
+        if (!success)
+          return [success, errorMsg];
       }
 
-      return [true, ''];
+      processors.forEach(p => p(node));
+
+      if (node.children)
+        stack.push(...node.children);
     }
+
+    return [true, ''];
   }
+
+  private isExpanded = (nodes: ITreeNode<ITreeNodeBase>[]) =>
+    nodes.every(n => n.expanded || !n.children || !n.children.length);
 
   @Input() set allowAdd(value: boolean) {
     this.config.allowAdd = value;
@@ -166,6 +169,19 @@ export class Ng2TreeViewComponent extends TreeNodeComponent<ITreeNodeBase> {
       this.state = NodeState.creating;
       add();
     }
+  }
+
+  protected onToggleHandler() {
+    let hasChildren = (node: ITreeNode<ITreeNodeBase>) =>
+      node.children !== undefined && node.children.length > 0;
+
+    let isNodeExpanded: Validator = (node: ITreeNode<ITreeNodeBase>) =>
+      [!hasChildren(node) || node.expanded, ''];
+
+    // if all the nodes are expanded mark the treeview as 'Expanded' otherwise mark as 'Collapsed'.
+    [this.expanded, ] = this.depthFirstTraversal(this.nodes, [isNodeExpanded], []);
+
+    super.onToggleHandler();
   }
 
   @Output() onSelected = new EventEmitter<ITreeNode<ITreeNodeBase>>();
