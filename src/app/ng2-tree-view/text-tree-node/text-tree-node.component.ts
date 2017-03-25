@@ -9,7 +9,7 @@ import { Component, OnInit, Input, SkipSelf, Host, Optional, Output, EventEmitte
   styleUrls: ['./text-tree-node.component.css']
 })
 export class TextTreeNodeComponent extends TreeNodeComponent<TextTreeNode> {
-  @Input() parentComponent: TreeNodeComponent<TextTreeNode>;
+  @Input() private parentComponent: TreeNodeComponent<TextTreeNode>;
 
   get children() {
     if (!this.node.children)

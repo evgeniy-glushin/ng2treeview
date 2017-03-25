@@ -50,7 +50,7 @@
 
   <ul *ngIf="node.expanded && hasChildren">
     <text-tree-node *ngFor="let child of node?.children" [node]="child" [parentComponent]="this" (onCreated)="onCreatedHandler($event)"
-                    (onCreating)="onCreatingHandler($event)" (onRemoved)="onRemovedHandler($event)" (onClick)="onClickHandler($event)" 
-                    (onToggle)="onToggleHandler()" [config]="config"></text-tree-node>
+                    (onCreating)="onCreatingHandler($event)" (onRemove)="onRemoveHandler($event)" (onRemoved)="onRemovedHandler($event)" 
+                    (onClick)="onClickHandler($event)" (onToggle)="onToggleHandler()" [config]="config"></text-tree-node>
   </ul>
 </li>

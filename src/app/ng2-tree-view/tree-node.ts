@@ -2,7 +2,7 @@ export interface ITreeNodeBase extends ICloneable {
     id: string;
     text: string;
     expanded: boolean;
-    parent?: ITreeNodeBase;
+    parent?: ITreeNode<ITreeNodeBase>;
 }
 
 export interface ITreeNode<TChild> extends ITreeNodeBase {

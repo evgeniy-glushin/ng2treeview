@@ -8,7 +8,7 @@ import { TreeNodeComponent } from './../tree-node-component';
   styleUrls: ['./check-tree-node.component.css']
 })
 export class CheckTreeNodeComponent extends TreeNodeComponent<CheckTreeNode>{
-  @Input() parentComponent: TreeNodeComponent<CheckTreeNode>;
+  @Input() private parentComponent: TreeNodeComponent<CheckTreeNode>;
 
 
   protected save(node: CheckTreeNode, text: string, keyCode = this.ENTER_KEY_CODE) {

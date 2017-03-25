@@ -1,3 +1,4 @@
+import { TreeViewComponent } from './tree-view-component';
 import { CheckTreeNodeComponent } from './check-tree-node/check-tree-node.component';
 import { TextTreeNode, TreeViewMode, CheckTreeNode, AddNodeCallback, NodeState, ITreeNode, ITreeNodeBase, createTreeNode } from './tree-node';
 import { TreeNodeComponent } from './tree-node-component';
@@ -11,7 +12,7 @@ type Processor = (node: ITreeNodeBase) => void;
   styleUrls: ['./ng2-tree-view.component.css'],
   templateUrl: './ng2-tree-view.component.html'
 })
-export class Ng2TreeViewComponent extends TreeNodeComponent<ITreeNodeBase> {
+export class Ng2TreeViewComponent extends TreeViewComponent {
   private _nodes: ITreeNode<ITreeNodeBase>[];
   @Input() set nodes(value: ITreeNode<ITreeNodeBase>[]) {
     console.log('Ng2TreeViewComponent.setNodes: ', value);
@@ -117,6 +118,9 @@ export class Ng2TreeViewComponent extends TreeNodeComponent<ITreeNodeBase> {
     this.onChecked.emit(node);
   }
 
+  protected onRemoveHandler(node: ITreeNode<ITreeNodeBase>) {
+    this.removeChild(this.nodes, node);
+  }
 
   private expanded = false;
   protected toggleAll() {
@@ -127,11 +131,14 @@ export class Ng2TreeViewComponent extends TreeNodeComponent<ITreeNodeBase> {
     });
   }
 
-  protected removeChild(node: ITreeNode<ITreeNodeBase>) {
+  // TODO: refactor signature
+  protected removeChild(children: ITreeNodeBase[], node: ITreeNode<ITreeNodeBase>) {
     console.log(`Ng2TreeViewComponent. removeChild.`);
     if (this.state === NodeState.creating)
       this.state = NodeState.unchanged;
-    super.removeChild(node);
+    super.removeChild(this.nodes, node);
+
+    // super.remove(node);
   }
 
   protected add() {
@@ -179,7 +186,7 @@ export class Ng2TreeViewComponent extends TreeNodeComponent<ITreeNodeBase> {
       [!hasChildren(node) || node.expanded, ''];
 
     // if all the nodes are expanded mark the treeview as 'Expanded' otherwise mark as 'Collapsed'.
-    [this.expanded, ] = this.depthFirstTraversal(this.nodes, [isNodeExpanded], []);
+    [this.expanded,] = this.depthFirstTraversal(this.nodes, [isNodeExpanded], []);
 
     super.onToggleHandler();
   }
@@ -211,10 +218,5 @@ export class Ng2TreeViewComponent extends TreeNodeComponent<ITreeNodeBase> {
   get children() {
     console.log('Ng2TreeViewComponent.children');
     return this.nodes;
-  }
-
-  get parent() {
-    console.log('Ng2TreeViewComponent.parent');
-    return this;
   }
 }
