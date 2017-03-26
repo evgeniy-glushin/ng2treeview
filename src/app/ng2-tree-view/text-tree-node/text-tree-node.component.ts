@@ -1,4 +1,4 @@
-import {TextTreeNode, NodeState, TreeViewConfig} from './../tree-node';
+import { TextTreeNode, NodeState, TreeViewConfig } from './../tree-node';
 import { TreeNodeComponent } from './../tree-node-component';
 import { Component, OnInit, Input, SkipSelf, Host, Optional, Output, EventEmitter } from '@angular/core';
 // TODO: remove unused imports
@@ -9,10 +9,5 @@ import { Component, OnInit, Input, SkipSelf, Host, Optional, Output, EventEmitte
   styleUrls: ['./text-tree-node.component.css']
 })
 export class TextTreeNodeComponent extends TreeNodeComponent<TextTreeNode> {
-  get children() {
-    if (!this.node.children)
-      this.node.children = [];
-    console.log('TreeNodeComponent.children', this.node.children);
-    return this.node.children;
-  }
+
 }

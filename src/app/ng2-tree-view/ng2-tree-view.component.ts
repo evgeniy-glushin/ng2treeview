@@ -1,8 +1,8 @@
-import { TreeViewComponent } from './tree-view-component';
 import { CheckTreeNodeComponent } from './check-tree-node/check-tree-node.component';
-import { TextTreeNode, TreeViewMode, CheckTreeNode, AddNodeCallback, NodeState, ITreeNode, ITreeNodeBase, createTreeNode } from './tree-node';
+import { TextTreeNode, TreeViewMode, CheckTreeNode, AddNodeCallback, NodeState, ITreeNode, ITreeNodeBase } from './tree-node';
 import { TreeNodeComponent } from './tree-node-component';
 import { Component, Input, Output, EventEmitter } from '@angular/core';
+import * as util from 'app/ng2-tree-view/utils';
 
 type Validator = (node: ITreeNodeBase) => [boolean, string];
 type Processor = (node: ITreeNodeBase) => void;
@@ -12,7 +12,7 @@ type Processor = (node: ITreeNodeBase) => void;
   styleUrls: ['./ng2-tree-view.component.css'],
   templateUrl: './ng2-tree-view.component.html'
 })
-export class Ng2TreeViewComponent extends TreeViewComponent {
+export class Ng2TreeViewComponent extends TreeNodeComponent<ITreeNodeBase> {
   private _nodes: ITreeNode<ITreeNodeBase>[];
   @Input() set nodes(value: ITreeNode<ITreeNodeBase>[]) {
     console.log('Ng2TreeViewComponent.setNodes: ', value);
@@ -119,7 +119,12 @@ export class Ng2TreeViewComponent extends TreeViewComponent {
   }
 
   protected onRemoveHandler(node: ITreeNode<ITreeNodeBase>) {
-    this.removeChild(this.nodes, node);
+    console.log(`onRemoveHandler. removeChild.`);
+    if (this.state === NodeState.creating)
+      this.state = NodeState.unchanged;
+
+    util.removeChild(node, this.nodes);
+    this.onRemoved.emit(node);
   }
 
   private expanded = false;
@@ -127,26 +132,16 @@ export class Ng2TreeViewComponent extends TreeViewComponent {
     this.expanded = !this.expanded;
 
     this.nodes.forEach(n => {
-      super.toggle(n, true, this.expanded);
+      util.toggle(n, true, this.expanded);
     });
-  }
-
-  // TODO: refactor signature
-  protected removeChild(children: ITreeNodeBase[], node: ITreeNode<ITreeNodeBase>) {
-    console.log(`Ng2TreeViewComponent. removeChild.`);
-    if (this.state === NodeState.creating)
-      this.state = NodeState.unchanged;
-    super.removeChild(this.nodes, node);
-
-    // super.remove(node);
   }
 
   protected add() {
     console.log(`Ng2TreeViewComponent. add.`);
 
     if (this.state !== NodeState.creating) {
-      let newNode = createTreeNode(this.config.mode);
-      this.children.push(newNode);
+      let newNode = util.createTreeNode(this.config.mode);
+      this.nodes.push(newNode);
       this.state = NodeState.creating;
     }
   }
@@ -213,10 +208,5 @@ export class Ng2TreeViewComponent extends TreeViewComponent {
 
   get nodes() {
     return this._nodes;
-  }
-
-  get children() {
-    console.log('Ng2TreeViewComponent.children');
-    return this.nodes;
   }
 }

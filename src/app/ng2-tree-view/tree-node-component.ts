@@ -1,9 +1,36 @@
-import { TreeViewComponent } from './tree-view-component';
 import { Output, EventEmitter, Input } from '@angular/core';
-import { TextTreeNode, TreeViewConfig, NodeState, AddNodeCallback, ITreeNode, createTreeNode, ITreeNodeBase } from './tree-node';
+import { TextTreeNode, TreeViewConfig, NodeState, AddNodeCallback, ITreeNode, ITreeNodeBase } from './tree-node';
+import * as util from './utils';
 
 //Represents abstraction and basic implementation for tree-like components.
-export abstract class TreeNodeComponent<TNode extends ITreeNode<TNode>> extends TreeViewComponent {
+export abstract class TreeNodeComponent<TNode extends ITreeNode<TNode>> {
+    //The dafault settings
+    @Input() protected config: TreeViewConfig = new TreeViewConfig(true, true, true, 'simple');
+
+    protected state: NodeState;
+
+    @Output() protected onToggle = new EventEmitter();
+    protected onToggleHandler() {
+        console.log('TreeViewComponent.onToggleHandler.');
+        return this.onToggle.emit();
+    }
+
+    @Output() onRemoved = new EventEmitter<ITreeNode<ITreeNodeBase>>();
+    protected onRemovedHandler(node: ITreeNode<ITreeNodeBase>) {
+        console.log('TreeViewComponent.onRemovedHandler: ', node);
+        this.onRemoved.emit(node);
+    }
+
+
+    @Output() onCreated = new EventEmitter<ITreeNode<ITreeNodeBase>>();
+    protected onCreatedHandler(newNode: ITreeNode<ITreeNodeBase>) {
+        console.log('TreeViewComponent.onCreatedHandler: ', newNode);
+        this.onCreated.emit(newNode);
+    }
+
+
+
+
     private _node: TNode;
     @Input() set node(value: TNode) {
         if (!value.text)
@@ -18,16 +45,24 @@ export abstract class TreeNodeComponent<TNode extends ITreeNode<TNode>> extends 
             console.log(`TreeViewComponent. add. emit callback`);
 
             //TODO: figure default values out
-            let newNode = createTreeNode(this.config.mode, this.node);
-            this.children.push(newNode);
+            let newNode = util.createTreeNode(this.config.mode, this.node);
+            util.addChild(this.node, newNode);
 
             this.toggle(this.node, false, true);
         });
     }
 
+    protected toggle(node: ITreeNode<ITreeNodeBase>, escalation = false, value?: boolean) {
+        util.toggle(node, escalation, value);
+        this.onToggle.emit();
+    }
+
+    @Output() onRemove = new EventEmitter<ITreeNode<ITreeNodeBase>>();
     protected onRemoveHandler(node: ITreeNode<ITreeNodeBase>) {
-        if (node.parent && node.parent.children)
-            this.removeChild(node.parent.children, node);
+        if (node.parent) {
+            util.removeChild(node, node.parent.children);
+            this.onRemoved.emit(node);
+        }
     }
 
     protected readonly ENTER_KEY_CODE = 13;
@@ -46,8 +81,7 @@ export abstract class TreeNodeComponent<TNode extends ITreeNode<TNode>> extends 
     }
 
     protected get hasChildren() {
-        const children = this.node.children;
-        return (children !== undefined && children.length > 0);
+        return util.hasChildren(this.node)
     }
 
     protected get isCreating() {
@@ -72,8 +106,6 @@ export abstract class TreeNodeComponent<TNode extends ITreeNode<TNode>> extends 
         return `../../assets/icons/folder${postfix}.svg`;
     }
 
-    //TODO according to latest changes make sure I realy need this prop.
-    abstract get children(): ITreeNode<ITreeNodeBase>[]
     protected remove(node: ITreeNode<ITreeNodeBase>) {
         console.log('TreeViewComponent.remove: ', node);
         this.onRemove.emit(node);
@@ -91,6 +123,4 @@ export abstract class TreeNodeComponent<TNode extends ITreeNode<TNode>> extends 
         console.log('TreeViewComponent.onCreatingHandler.');
         return this.onCreating.emit(addCallback);
     }
-
-
 }

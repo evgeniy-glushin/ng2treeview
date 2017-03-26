@@ -78,24 +78,7 @@ export type TreeViewMode = 'simple' | 'check';
 
 export type AddNodeCallback = () => void;
 
-export function createTreeNode(mode: TreeViewMode, parent?: ITreeNodeBase) {
-    let newId = Date.now().toString();
-    let newNode: ITreeNodeBase;
 
-    switch (mode) {
-        case 'simple':
-            newNode = new TextTreeNode(newId, '');
-            break;
-        case 'check':
-            newNode = new CheckTreeNode(newId, '');
-            break;
-        default:
-            throw new Error(`Unknown mode: ${mode};`);
-    }
-
-    newNode.parent = parent;
-    return newNode;
-}
 
 
 

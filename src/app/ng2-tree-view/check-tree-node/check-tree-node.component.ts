@@ -1,6 +1,7 @@
 import { CheckTreeNode, ITreeNode, TreeViewConfig, NodeState } from './../tree-node';
 import { Component, Output, EventEmitter, Input, OnInit } from '@angular/core';
 import { TreeNodeComponent } from './../tree-node-component';
+import * as util from '../utils';
 
 @Component({
   selector: 'check-tree-node',
@@ -48,18 +49,10 @@ export class CheckTreeNodeComponent extends TreeNodeComponent<CheckTreeNode>{
   protected onCheckedHandler(node: CheckTreeNode) {
     console.log('CheckTreeNodeComponent.onCheckedHandler. before emit ', this.node);
 
-    if (this.children.length)
-      this.node.checked = this.children.every(n => n.checked);
+    if (util.hasChildren(this.node))
+      this.node.checked = util.allChecked(node.children as CheckTreeNode[]);
 
     this.onChecked.emit(node);
     console.log('CheckTreeNodeComponent.onCheckedHandler: after emit', this.node);
-  }
-
-
-  get children() {
-    if (!this.node.children)
-      this.node.children = [];
-    console.log('TreeNodeComponent.children', this.node.children);
-    return this.node.children;
   }
 }
