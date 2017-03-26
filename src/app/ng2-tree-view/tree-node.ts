@@ -78,6 +78,10 @@ export type TreeViewMode = 'simple' | 'check';
 
 export type AddNodeCallback = () => void;
 
+export type Validator = (node: ITreeNodeBase) => [boolean, string];
+export type Processor = (node: ITreeNodeBase) => void;
+
+
 
 
 

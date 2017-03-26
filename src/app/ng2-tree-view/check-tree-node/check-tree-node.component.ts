@@ -19,17 +19,9 @@ export class CheckTreeNodeComponent extends TreeNodeComponent<CheckTreeNode>{
 
   private check(node: CheckTreeNode) {
     console.log('CheckTreeNodeComponent.check. node: ', node);
-    broadcastChildren(node.children);
-    this.onChecked.emit(node);
+    util.check(node);
 
-    function broadcastChildren(children?: CheckTreeNode[]) {
-      console.log('CheckTreeNodeComponent.escalateChildren: ', children);
-      if (children)
-        children.forEach(n => {
-          n.checked = node.checked;
-          broadcastChildren(n.children);
-        });
-    }
+    this.onChecked.emit(node);
   }
 
   protected get iconUrl() {
@@ -50,7 +42,7 @@ export class CheckTreeNodeComponent extends TreeNodeComponent<CheckTreeNode>{
     console.log('CheckTreeNodeComponent.onCheckedHandler. before emit ', this.node);
 
     if (util.hasChildren(this.node))
-      this.node.checked = util.allChecked(node.children as CheckTreeNode[]);
+      this.node.checked = util.allChecked(this.node.children as CheckTreeNode[]);
 
     this.onChecked.emit(node);
     console.log('CheckTreeNodeComponent.onCheckedHandler: after emit', this.node);

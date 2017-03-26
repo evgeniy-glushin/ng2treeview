@@ -1,11 +1,8 @@
 import { CheckTreeNodeComponent } from './check-tree-node/check-tree-node.component';
-import { TextTreeNode, TreeViewMode, CheckTreeNode, AddNodeCallback, NodeState, ITreeNode, ITreeNodeBase } from './tree-node';
+import { TextTreeNode, TreeViewMode, CheckTreeNode, AddNodeCallback, NodeState, ITreeNode, ITreeNodeBase, Validator, Processor } from './tree-node';
 import { TreeNodeComponent } from './tree-node-component';
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import * as util from 'app/ng2-tree-view/utils';
-
-type Validator = (node: ITreeNodeBase) => [boolean, string];
-type Processor = (node: ITreeNodeBase) => void;
 
 @Component({
   selector: 'ng2treeview',
@@ -17,35 +14,15 @@ export class Ng2TreeViewComponent extends TreeNodeComponent<ITreeNodeBase> {
   @Input() set nodes(value: ITreeNode<ITreeNodeBase>[]) {
     console.log('Ng2TreeViewComponent.setNodes: ', value);
 
-    this.expanded = this.isExpanded(value);
+    let isExpanded = (nodes: ITreeNode<ITreeNodeBase>[]) =>
+      nodes.every(n => n.expanded || !n.children || !n.children.length);
+
+    this.expanded = isExpanded(value);
 
     console.log('Ng2TreeViewComponent.setNodes. expanded: ', this.expanded);
 
-    let emptyValidator: Validator = ({ id, text }: ITreeNodeBase) => {
-      if (id && text)
-        return [true, ''];
-      else
-        return [false, `Invalid node found. Empty value. Id: ${id}; Text: ${text}`];
-    };
-
-    let uniqeIds = new Set<string>();
-    let uniqueIdValidator: Validator = ({ id, text }: ITreeNodeBase) => {
-      if (uniqeIds.has(id))
-        return [false, `Invalid node found. Duplicate Id. Id: ${id}; Text: ${text}`];
-      else {
-        uniqeIds.add(id);
-        return [true, ''];
-      }
-    };
-
-    let setParent: Processor = (node: ITreeNode<ITreeNodeBase>) => {
-      if (node.children)
-        node.children.forEach(child => child.parent = node);
-    };
-
     let inputClone = value.map(x => x.clone());
-
-    let [success, errorMsg] = this.depthFirstTraversal(inputClone, [emptyValidator, uniqueIdValidator], [setParent]);
+    let [success, errorMsg] = util.depthFirstTraversal(inputClone, [util.emptyValidator, util.buildUniqueIdValidator()], [util.setParent]);
 
     console.log('after depthFirstTraversal ', inputClone);
 
@@ -54,34 +31,6 @@ export class Ng2TreeViewComponent extends TreeNodeComponent<ITreeNodeBase> {
     else
       console.error(errorMsg);
   }
-
-  /**
-  * Goes through the nodes and applies validators for each node.
-  * @returns the validation result.
-  */
-  private depthFirstTraversal(nodes: ITreeNode<ITreeNodeBase>[], validators: Validator[], processors: Processor[]): [boolean, string] {
-    let stack = [...nodes];
-
-    while (stack.length) {
-      let node = stack.pop() as TextTreeNode; //condition in while loop guarantees that it can't be undefined
-
-      for (let validator of validators) {
-        let [success, errorMsg] = validator(node);
-        if (!success)
-          return [success, errorMsg];
-      }
-
-      processors.forEach(p => p(node));
-
-      if (node.children)
-        stack.push(...node.children);
-    }
-
-    return [true, ''];
-  }
-
-  private isExpanded = (nodes: ITreeNode<ITreeNodeBase>[]) =>
-    nodes.every(n => n.expanded || !n.children || !n.children.length);
 
   @Input() set allowAdd(value: boolean) {
     this.config.allowAdd = value;
@@ -174,21 +123,14 @@ export class Ng2TreeViewComponent extends TreeNodeComponent<ITreeNodeBase> {
   }
 
   protected onToggleHandler() {
-    let hasChildren = (node: ITreeNode<ITreeNodeBase>) =>
-      node.children !== undefined && node.children.length > 0;
-
-    let isNodeExpanded: Validator = (node: ITreeNode<ITreeNodeBase>) =>
-      [!hasChildren(node) || node.expanded, ''];
-
     // if all the nodes are expanded mark the treeview as 'Expanded' otherwise mark as 'Collapsed'.
-    [this.expanded,] = this.depthFirstTraversal(this.nodes, [isNodeExpanded], []);
-
+    [this.expanded,] = util.depthFirstTraversal(this.nodes, [util.isNodeExpandedValidator], []);
     super.onToggleHandler();
   }
 
+  private selectedComponent: {selected: boolean, node: ITreeNodeBase} | undefined;
   @Output() onSelected = new EventEmitter<ITreeNode<ITreeNodeBase>>();
-  private selectedComponent: TreeNodeComponent<ITreeNodeBase> | undefined;
-  protected onClickHandler(component: TreeNodeComponent<ITreeNodeBase>) {
+  protected onSelectHandler(component: {selected: boolean, node: ITreeNodeBase}) {
     console.log('Ng2TreeViewComponent.onClickHandler: ', component);
 
     if (!this.selectedComponent) {

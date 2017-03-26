@@ -1,4 +1,4 @@
-import { ITreeNodeBase, ITreeNode, TreeViewMode, TextTreeNode, CheckTreeNode } from './tree-node';
+import { ITreeNodeBase, ITreeNode, TreeViewMode, TextTreeNode, CheckTreeNode, Validator, Processor } from './tree-node';
 
 export function removeChild(nodeToRemove: ITreeNodeBase, source?: ITreeNodeBase[]) {
     console.log(`removeChild. node: ${nodeToRemove.text}; children: `, source)
@@ -76,3 +76,75 @@ export function createTreeNode(mode: TreeViewMode, parent?: ITreeNodeBase) {
 export function allChecked(nodes: CheckTreeNode[]) {
     return nodes.every(n => n.checked);
 }
+
+export function check(node: CheckTreeNode) {
+    broadcastChildren(node.children);
+    return node;
+
+    function broadcastChildren(children?: CheckTreeNode[]) {
+        console.log('CheckTreeNodeComponent.escalateChildren: ', children);
+        if (children)
+            children.forEach(n => {
+                n.checked = node.checked;
+                broadcastChildren(n.children);
+            });
+    }
+}
+
+
+/**
+* Goes through the nodes and applies validators for each node.
+* @returns the validation result.
+*/
+export function depthFirstTraversal(nodes: ITreeNode<ITreeNodeBase>[], validators: Validator[], processors: Processor[]): [boolean, string] {
+    let stack = [...nodes];
+
+    while (stack.length) {
+        let node = stack.pop() as TextTreeNode; //condition in while loop guarantees that it can't be undefined
+
+        for (let validator of validators) {
+            let [success, errorMsg] = validator(node);
+            if (!success)
+                return [success, errorMsg];
+        }
+
+        processors.forEach(p => p(node));
+
+        if (node.children)
+            stack.push(...node.children);
+    }
+
+    return [true, ''];
+}
+
+export function emptyValidator({ id, text }: ITreeNodeBase): [boolean, string] {
+    if (id && text)
+        return [true, ''];
+    else
+        return [false, `Invalid node found. Empty value. Id: ${id}; Text: ${text}`];
+}
+
+export function isNodeExpandedValidator(node: ITreeNode<ITreeNodeBase>): [boolean, string] {
+    return [!hasChildren(node) || node.expanded, ''];
+}
+
+export function buildUniqueIdValidator(): Validator {
+    let uniqeIds = new Set<string>();
+    return ({ id, text }: ITreeNodeBase) => {
+        if (uniqeIds.has(id))
+            return [false, `Invalid node found. Duplicate Id. Id: ${id}; Text: ${text}`];
+        else {
+            uniqeIds.add(id);
+            return [true, ''];
+        }
+    };
+}
+
+export function setParent(node: ITreeNode<ITreeNodeBase>) {
+    if (node.children)
+        node.children.forEach(child => child.parent = node);
+};
+
+
+
+

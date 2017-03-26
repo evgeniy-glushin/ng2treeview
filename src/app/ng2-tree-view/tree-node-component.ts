@@ -32,7 +32,7 @@ export abstract class TreeNodeComponent<TNode extends ITreeNode<TNode>> {
 
 
     private _node: TNode;
-    @Input() set node(value: TNode) {
+    @Input() protected set node(value: TNode) {
         if (!value.text)
             this.state = NodeState.creating;
 
@@ -88,11 +88,11 @@ export abstract class TreeNodeComponent<TNode extends ITreeNode<TNode>> {
         return this.state === NodeState.creating;
     }
 
-    get node() {
+    protected get node() {
         return this._node;
     }
 
-    selected = false;
+    protected selected = false;
 
     protected get iconUrl() {
         let postfix = '';
