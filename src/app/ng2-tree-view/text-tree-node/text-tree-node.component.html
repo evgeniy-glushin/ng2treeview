@@ -49,7 +49,7 @@
   <input #nodeText type="text" *ngIf="isCreating" (keydown)="save(node, nodeText.value, $event.keyCode)" />
 
   <ul *ngIf="node.expanded && hasChildren">
-    <text-tree-node *ngFor="let child of node?.children" [node]="child" [parentComponent]="this" (onCreated)="onCreatedHandler($event)"
+    <text-tree-node *ngFor="let child of node?.children" [node]="child" (onCreated)="onCreatedHandler($event)"
                     (onCreating)="onCreatingHandler($event)" (onRemove)="onRemoveHandler($event)" (onRemoved)="onRemovedHandler($event)" 
                     (onClick)="onClickHandler($event)" (onToggle)="onToggleHandler()" [config]="config"></text-tree-node>
   </ul>

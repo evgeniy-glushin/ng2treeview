@@ -8,9 +8,6 @@ import { TreeNodeComponent } from './../tree-node-component';
   styleUrls: ['./check-tree-node.component.css']
 })
 export class CheckTreeNodeComponent extends TreeNodeComponent<CheckTreeNode>{
-  @Input() private parentComponent: TreeNodeComponent<CheckTreeNode>;
-
-
   protected save(node: CheckTreeNode, text: string, keyCode = this.ENTER_KEY_CODE) {
     if (text && keyCode === this.ENTER_KEY_CODE) {
       super.save(node, text, keyCode);
@@ -64,10 +61,5 @@ export class CheckTreeNodeComponent extends TreeNodeComponent<CheckTreeNode>{
       this.node.children = [];
     console.log('TreeNodeComponent.children', this.node.children);
     return this.node.children;
-  }
-
-  get parent() {
-    console.log('TreeNodeComponent.parent: ', this.parentComponent);
-    return this.parentComponent;
   }
 }

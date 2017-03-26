@@ -9,17 +9,10 @@ import { Component, OnInit, Input, SkipSelf, Host, Optional, Output, EventEmitte
   styleUrls: ['./text-tree-node.component.css']
 })
 export class TextTreeNodeComponent extends TreeNodeComponent<TextTreeNode> {
-  @Input() private parentComponent: TreeNodeComponent<TextTreeNode>;
-
   get children() {
     if (!this.node.children)
       this.node.children = [];
     console.log('TreeNodeComponent.children', this.node.children);
     return this.node.children;
-  }
-
-  get parent() {
-    console.log('TreeNodeComponent.parent: ', this.parentComponent);
-    return this.parentComponent;
   }
 }

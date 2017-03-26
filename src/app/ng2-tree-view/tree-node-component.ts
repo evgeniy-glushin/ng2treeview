@@ -18,7 +18,7 @@ export abstract class TreeNodeComponent<TNode extends ITreeNode<TNode>> extends 
             console.log(`TreeViewComponent. add. emit callback`);
 
             //TODO: figure default values out
-            let newNode = createTreeNode(this.config.mode);
+            let newNode = createTreeNode(this.config.mode, this.node);
             this.children.push(newNode);
 
             this.toggle(this.node, false, true);
